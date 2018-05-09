@@ -5,11 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Deco2500HighFidelityPrototype.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Deco2500HighFidelityPrototype.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHostingEnvironment _env;
+        public HomeController(IHostingEnvironment env)
+        {
+            _env = env;
+        }
         public IActionResult Index()
         {
             return View();
