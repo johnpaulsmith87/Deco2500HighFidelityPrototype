@@ -9,5 +9,6 @@ namespace Deco2500HighFidelityPrototype.Models
     {
         public Guid UserId { get; set; }
         public DateTime EventDateTime { get; set; }
+        public Meal Meal { get; set; }
     }
 }

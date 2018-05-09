@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace Deco2500HighFidelityPrototype.Models
 {
-    public class Ingredients
+    public class Ingredient
     {
+        public Guid IngredientId { get; set; }
+        public string Name { get; set; }
+        public decimal CaloriesPerGram { get; set; }
     }
 }
