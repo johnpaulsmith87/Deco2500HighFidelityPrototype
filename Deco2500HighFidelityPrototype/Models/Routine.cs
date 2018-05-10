@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Deco2500HighFidelityPrototype.Models
 {
-    public class Meal
+    public class Routine
     {
-        public Guid MealId { get; set; }
-        public List<(Guid IngredientId, decimal weight)> IngredientsAndWeights { get; set; }
+        public Guid RoutineId { get; set; }
+        public List<Excercise> Excercises { get; set; }
     }
 }
