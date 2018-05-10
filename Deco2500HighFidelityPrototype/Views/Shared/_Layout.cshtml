@@ -17,6 +17,7 @@
     </environment>
 </head>
 <body>
+    <!--
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -37,8 +38,15 @@
             </div>
         </div>
     </nav>
+        -->
     <div class="container body-content">
-        @RenderBody()
+        <div class="smartphone">
+            <div class="screen">
+                <div class="grid-container">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
         <hr />
         <footer>
             <p>&copy; 2018 - Deco2500HighFidelityPrototype</p>
@@ -49,7 +57,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/moment.js"</script>
+        <script src="~/js/moment.js"></script>
         <script src="~/js/Chart.js"></script>
     </environment>
     <environment exclude="Development">
@@ -66,7 +74,7 @@
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/js/moment.js"</script>
+        <script src="~/js/moment.js"></script>
         <script src="~/js/Chart.js"></script>
     </environment>
 

@@ -22,4 +22,10 @@
     <Folder Include="Views\Settings\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\images\smartphonecutoutTemplate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
