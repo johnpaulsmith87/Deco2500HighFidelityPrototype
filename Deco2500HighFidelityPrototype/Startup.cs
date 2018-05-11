@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Deco2500HighFidelityPrototype.Models.DataAccess;
+
 
 namespace Deco2500HighFidelityPrototype
 {
@@ -14,6 +16,7 @@ namespace Deco2500HighFidelityPrototype
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -27,6 +30,7 @@ namespace Deco2500HighFidelityPrototype
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -45,6 +49,7 @@ namespace Deco2500HighFidelityPrototype
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            Database.SeedDatabase(env.ContentRootPath);
         }
     }
 }
