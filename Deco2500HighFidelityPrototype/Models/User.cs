@@ -11,5 +11,6 @@ namespace Deco2500HighFidelityPrototype.Models
         public Guid Id { get; set; }
         public Preferences Preferences {get;set;}
         public DateTime DOB { get; set; }
+        public List<IHistory> History { get; set; }
     }
 }

@@ -10,4 +10,10 @@ namespace Deco2500HighFidelityPrototype.Models
         Fitness,
         Diet
     }
+    public enum ExerciseType
+    {
+        RepBased,
+        TimeBased,
+        DistanceBased
+    }
 }

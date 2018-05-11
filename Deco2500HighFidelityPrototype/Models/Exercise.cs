@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace Deco2500HighFidelityPrototype.Models
 {
-    public class Excercise
+    public class Exercise
     {
         public string Name { get; set; }
         // needs type and duration?? maybe something else?
+        public ExerciseType ExerciseType { get; set; }
+
+        public decimal CaloriesPerUnit { get; set; }
     }
 }

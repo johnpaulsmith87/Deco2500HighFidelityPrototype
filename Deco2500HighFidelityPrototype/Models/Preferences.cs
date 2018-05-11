@@ -8,5 +8,7 @@ namespace Deco2500HighFidelityPrototype.Models
     public class Preferences
     {
         // put a bunch of bools?
+        public bool Privacy { get; set; }
+
     }
 }
