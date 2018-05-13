@@ -13,8 +13,9 @@ namespace Deco2500HighFidelityPrototype.Models
         }
         public Exercise(string name, decimal caloriesPerUnit)
         {
-            Name = name.Trim();
+            Name = name.TrimEnd();
             CaloriesPerUnit = caloriesPerUnit;
+            ExerciseId = Guid.NewGuid();
             if (DistanceTypeExcercises().Contains(name))
                 ExerciseType = ExerciseType.DistanceBased;
             else
@@ -28,10 +29,7 @@ namespace Deco2500HighFidelityPrototype.Models
 
         public Guid ExerciseId { get; set; }
 
-        private static List<string> DistanceTypeExcercises()
-        {
-            return new List<string>()
-            {
+        private static List<string> DistanceTypeExcercises() => new List<string>() {
                "Swim Backstroke",
                "Swim Breastroke",
                "Swim Butterfly",
@@ -39,9 +37,9 @@ namespace Deco2500HighFidelityPrototype.Models
                "Walk Continuous or Program",
                "Run Mixed Terrain",
                "Run Treadmill"
+               };
 
-            };
-        }
+
 
 
     }

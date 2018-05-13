@@ -16,6 +16,7 @@ namespace Deco2500HighFidelityPrototype.Models
             //use some random math to assign calories per gram
             Name = name;
             CaloriesPerGram = caloriesPerGram;
+            IngredientId = Guid.NewGuid();
         }
         public Guid IngredientId { get; set; }
         public string Name { get; set; }

@@ -10,5 +10,6 @@ namespace Deco2500HighFidelityPrototype.Models
         // put a bunch of bools?
         public bool Privacy { get; set; }
 
+        public static Preferences GetDefaultPreferences() => new Preferences() { Privacy = false };
     }
 }

@@ -5,15 +5,9 @@ using System.Threading.Tasks;
 
 namespace Deco2500HighFidelityPrototype.Models
 {
-    public enum EventType
-    {
-        Fitness,
-        Diet
-    }
-    public enum ExerciseType
+   public enum ExerciseType
     {
         RepBased,
-        TimeBased,
         DistanceBased
     }
 }
