@@ -28,96 +28,98 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
             string[] exerciseLines;
             string[] ingredientLines;
             var rand = new Random();
-            if (!File.Exists(Path.Combine(appRoot, DATABASE_FILE_PATH)))
+            if (File.Exists(Path.Combine(appRoot, DATABASE_FILE_PATH)))
             {
-                try
+                return;
+            }
+            try
+            {
+                //generate ingredient/exercise database from files
+                exerciseLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, EXERCISE_FILE_PATH));
+                ingredientLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
+                var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand)));
+                var seedIngredients = ingredientLines.Distinct().Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand)));
+                // now we can create a new user and fake history - then we save to db
+                var user = new User()
                 {
-                    //generate ingredient/exercise database from files
-                    exerciseLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, EXERCISE_FILE_PATH));
-                    ingredientLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
-                    var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand)));
-                    var seedIngredients = ingredientLines.Distinct().Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand)));
-                    // now we can create a new user and fake history - then we save to db
-                    var user = new User()
-                    {
-                        DOB = DateTime.Parse("1996-06-06"),
-                        Name = "Cornelius Von Hammerschmidt",
-                        Id = Guid.NewGuid(),
-                        Preferences = Preferences.GetDefaultPreferences()
-                    };
-                    //  fake history, since Guids have just been generated (we don't know them!)
-                    // I'll have to query the ingredients/exercises by name and get their guid that way 
-                    //  first let's gather up like 5-6 ingredients and 2-3 exercises!
-                    // this code is not efficient (i.e repeating work) but it really doesn't matter for this application
+                    DOB = DateTime.Parse("1996-06-06"),
+                    Name = "Cornelius Von Hammerschmidt",
+                    Id = Guid.NewGuid(),
+                    Preferences = Preferences.GetDefaultPreferences()
+                };
+                //  fake history, since Guids have just been generated (we don't know them!)
+                // I'll have to query the ingredients/exercises by name and get their guid that way 
+                //  first let's gather up like 5-6 ingredients and 2-3 exercises!
+                // this code is not efficient (i.e repeating work) but it really doesn't matter for this application
 
-                    //ingredients i will use
-                    var chicken = seedIngredients.First(i => i.Name == "chicken");
-                    var broccoli = seedIngredients.First(i => i.Name == "broccoli");
-                    var turkey = seedIngredients.First(i => i.Name == "turkey");
-                    var bacon = seedIngredients.First(i => i.Name == "bacon");
-                    var lettuce = seedIngredients.First(i => i.Name == "iceberg lettuce");
-                    var rice = seedIngredients.First(i => i.Name == "rice");
-                    var bread = seedIngredients.First(i => i.Name == "bread");
-                    var mayonnaise = seedIngredients.First(i => i.Name == "mayonnaise");
+                //ingredients i will use
+                var chicken = seedIngredients.First(i => i.Name == "chicken");
+                var broccoli = seedIngredients.First(i => i.Name == "broccoli");
+                var turkey = seedIngredients.First(i => i.Name == "turkey");
+                var bacon = seedIngredients.First(i => i.Name == "bacon");
+                var lettuce = seedIngredients.First(i => i.Name == "iceberg lettuce");
+                var rice = seedIngredients.First(i => i.Name == "rice");
+                var bread = seedIngredients.First(i => i.Name == "bread");
+                var mayonnaise = seedIngredients.First(i => i.Name == "mayonnaise");
 
-                    //exercises
-                    var runTreadmill = seedExercises.First(e => e.Name.Contains("Run Treadmill"));
-                    var pushUp = seedExercises.First(e => e.Name.Contains("Push Up"));
-                    var curl = seedExercises.First(e => e.Name.Contains("Curl & Press Dumbbells"));
+                //exercises
+                var runTreadmill = seedExercises.First(e => e.Name.Contains("Run Treadmill"));
+                var pushUp = seedExercises.First(e => e.Name.Contains("Push Up"));
+                var curl = seedExercises.First(e => e.Name.Contains("Curl & Press Dumbbells"));
 
-                    var meal1 = new Meal()
-                    {
-                        MealId = Guid.NewGuid(),
-                        IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                var meal1 = new Meal()
+                {
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                         {
                             (chicken.IngredientId, 240.0m),
                             (broccoli.IngredientId, 100.5m),
                             (rice.IngredientId, 205.5m)
                         }
-                    };
-                    var meal2 = new Meal()
-                    {
-                        MealId = Guid.NewGuid(),
-                        IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                };
+                var meal2 = new Meal()
+                {
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                         {
                             (turkey.IngredientId, 150.0m),
                             (bacon.IngredientId, 80.5m),
                             (bread.IngredientId, 150.5m),
                             (mayonnaise.IngredientId, 25m)
                         }
-                    };
-                    var meal3 = new Meal()
-                    {
-                        MealId = Guid.NewGuid(),
-                        IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                };
+                var meal3 = new Meal()
+                {
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                         {
                             (chicken.IngredientId, 240.0m),
                             (broccoli.IngredientId, 100.5m),
                             (rice.IngredientId, 205.5m)
                         }
-                    };
+                };
 
-                    var routine1 = new Routine()
-                    {
-                        RoutineId = Guid.NewGuid(),
-                        Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
+                var routine1 = new Routine()
+                {
+                    RoutineId = Guid.NewGuid(),
+                    Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
                         {
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:22:34")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:10:30"))
                         }
-                    };
-                    var routine2 = new Routine()
-                    {
-                        RoutineId = Guid.NewGuid(),
-                        Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
+                };
+                var routine2 = new Routine()
+                {
+                    RoutineId = Guid.NewGuid(),
+                    Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
                         {
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:23:15")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:09:57")),
                             (curl.ExerciseId, 30m, TimeSpan.Parse("00:06:23"))
                         }
-                    };
-                    //Now use these to create histories
-                    user.History = new List<IHistory>
+                };
+                //Now use these to create histories
+                user.History = new List<IHistory>
                     {
                         new DietHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(3), Meal = meal1 },
                         new DietHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(2), Meal = meal2 },
@@ -125,30 +127,38 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                         new FitnessHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(3), RoutinePerformed = routine1 },
                         new FitnessHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(1), RoutinePerformed = routine2 }
                     };
-                    //create database object
-                    var database = new DatabaseModel()
-                    {
-                        Users = new List<User>() { user },
-                        AllExercises = seedExercises.ToList(),
-                        AllIngredients = seedIngredients.ToList()
-                    };
-                    //save to file~ fingers crossed!
-                    await SaveDatabase(database, appRoot);
-                }
-                catch (Exception e)
+                //create database object
+                var database = new DatabaseModel()
                 {
-                    //do nothing, just don't cause an uncaught exception
-                }
+                    Users = new List<User>() { user },
+                    AllExercises = seedExercises.ToList(),
+                    AllIngredients = seedIngredients.ToList()
+                };
+                //save to file~ fingers crossed!
+                await Task.Run(() => SaveDatabase(database, appRoot));
             }
+            catch (Exception e)
+            {
+                //do nothing, just don't cause an uncaught exception
+            }
+
 
         }
         public static DatabaseModel GetDatabase(string appRoot)
         {
-            throw new NotImplementedException();
+            var rawText = File.ReadAllText(Path.Combine(appRoot, DATABASE_FILE_PATH));
+            return JsonConvert.DeserializeObject<DatabaseModel>(rawText, new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
         }
         public static async void SaveDatabase(DatabaseModel dbToSave, string appRoot)
         {
-
+            var jsonString = JsonConvert.SerializeObject(dbToSave, Formatting.Indented, new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+            await File.WriteAllTextAsync(Path.Combine(appRoot, DATABASE_FILE_PATH), jsonString);
         }
         private static decimal GenerateRandomCaloriesPerGram(Random rand)
         {
