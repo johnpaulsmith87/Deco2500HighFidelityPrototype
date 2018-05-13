@@ -8,6 +8,6 @@ namespace Deco2500HighFidelityPrototype.Models
     public class Routine
     {
         public Guid RoutineId { get; set; }
-        public List<(Guid ExerciseId, decimal amountTypeDependent)> Exercises { get; set; }
+        public List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)> Exercises { get; set; }
     }
 }

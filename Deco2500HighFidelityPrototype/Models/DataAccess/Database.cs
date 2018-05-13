@@ -17,7 +17,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
     {
         private const string EXERCISE_FILE_PATH = "./allExercises.txt";
         private const string DATABASE_FILE_PATH = "./database.json";
-        private const int MAX_EXERCISE = 924;
+        private const string INGREDIENT_FILE_PATH = "./allIngredients.txt";
         /// <summary>
         /// This method will seed a database if one does not exist. It will add ingredients/excercises and load a user with
         /// some initial history.
@@ -25,18 +25,25 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
         /// <param name="appRoot"> File path to the root directory of the application. Generate using IHostingEnvironment through dependency injection.</param>
         public static async void SeedDatabase(string appRoot)
         {
+            string[] exerciseLines;
+            string[] ingredientLines;
             if (!File.Exists(Path.Combine(appRoot, DATABASE_FILE_PATH)))
             {
-                //put all seeding code here!
-                string exerciseText = await File.ReadAllTextAsync(Path.Combine(appRoot, EXERCISE_FILE_PATH));
-                int exerciseNumber = 1;
-                int lowIndex = 0;
-                int highIndex = 0;
-                while(exerciseNumber < MAX_EXERCISE)
+                try
                 {
+                    var rand = new Random();
 
+                    exerciseLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, EXERCISE_FILE_PATH));
+                    ingredientLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
 
-                    exerciseNumber++;
+                    var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand)));
+                    var seedIngredients = ingredientLines.Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand)));
+                    var test = false;
+
+                }
+                catch (Exception e)
+                {
+                    //do nothing, just don't cause an uncaught exception
                 }
             }
 
@@ -48,6 +55,14 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
         public static void SaveDatabase(DatabaseModel dbToSave, string appRoot)
         {
 
+        }
+        private static decimal GenerateRandomCaloriesPerGram(Random rand)
+        {
+            return (decimal)(rand.NextDouble() * 10);
+        }
+        private static decimal GenerateRandomCaloriesPerUnit(Random rand)
+        {
+            return (decimal)(rand.NextDouble() * 7);
         }
     }
     public class DatabaseModel
