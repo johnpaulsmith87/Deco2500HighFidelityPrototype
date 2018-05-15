@@ -135,7 +135,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                     AllIngredients = seedIngredients.ToList()
                 };
                 //save to file~ fingers crossed! - code smell!
-                await Task.Run(() => SaveDatabase(database, appRoot));
+                await SaveDatabase(database, appRoot);
             }
             catch (Exception e)
             {
@@ -162,7 +162,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
         /// </summary>
         /// <param name="dbToSave"> DatabaseModel to save to disk</param>
         /// <param name="appRoot">Pass in _env.ContentRootPath as the appRoot string parameter</param>
-        public static async void SaveDatabase(DatabaseModel dbToSave, string appRoot)
+        public static async Task SaveDatabase(DatabaseModel dbToSave, string appRoot)
         {
             var jsonString = JsonConvert.SerializeObject(dbToSave, Formatting.Indented, new JsonSerializerSettings()
             {
