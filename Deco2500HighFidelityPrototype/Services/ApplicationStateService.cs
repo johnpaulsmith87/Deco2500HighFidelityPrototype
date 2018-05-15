@@ -7,6 +7,11 @@ using Deco2500HighFidelityPrototype.Models;
 
 namespace Deco2500HighFidelityPrototype.Services
 {
+    /// <summary>
+    /// Singleton class for application caching - use to display
+    /// Exercises and Ingredients in the front end to avoid
+    /// database reading (i.e slow disk reads)
+    /// </summary>
     public class ApplicationStateService
     {
 

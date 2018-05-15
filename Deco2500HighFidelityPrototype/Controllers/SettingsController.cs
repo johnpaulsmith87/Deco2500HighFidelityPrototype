@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Deco2500HighFidelityPrototype.Models.DataAccess;
 
 namespace Deco2500HighFidelityPrototype.Controllers
 {

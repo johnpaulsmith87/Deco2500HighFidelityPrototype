@@ -134,7 +134,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                     AllExercises = seedExercises.ToList(),
                     AllIngredients = seedIngredients.ToList()
                 };
-                //save to file~ fingers crossed!
+                //save to file~ fingers crossed! - code smell!
                 await Task.Run(() => SaveDatabase(database, appRoot));
             }
             catch (Exception e)
@@ -144,6 +144,11 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
 
 
         }
+        /// <summary>
+        /// Returns an instance of DatabaseModel with data parsed from database.json
+        /// </summary>
+        /// <param name="appRoot"> Pass in _env.ContentRootPath as the appRoot string parameter</param>
+        /// <returns></returns>
         public static DatabaseModel GetDatabase(string appRoot)
         {
             var rawText = File.ReadAllText(Path.Combine(appRoot, DATABASE_FILE_PATH));
@@ -152,6 +157,11 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 TypeNameHandling = TypeNameHandling.Auto
             });
         }
+        /// <summary>
+        /// Saves the given DatabaseModel instance to file using the json format.
+        /// </summary>
+        /// <param name="dbToSave"> DatabaseModel to save to disk</param>
+        /// <param name="appRoot">Pass in _env.ContentRootPath as the appRoot string parameter</param>
         public static async void SaveDatabase(DatabaseModel dbToSave, string appRoot)
         {
             var jsonString = JsonConvert.SerializeObject(dbToSave, Formatting.Indented, new JsonSerializerSettings()
@@ -169,11 +179,23 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
             return (decimal)(rand.NextDouble() * 7);
         }
     }
+    /// <summary>
+    /// This class represents the database for the application. Use this class to read/write to database.json
+    /// </summary>
     public class DatabaseModel
     {
-        //put all datamodel classes in here
-        public List<Exercise> AllExercises { get; set; } // these are loaded from a text file (plus additional seeds?)
+        /// <summary>
+        /// List of all exercises read from allExercises.txt (>800)
+        /// </summary>
+        public List<Exercise> AllExercises { get; set; }
+        /// <summary>
+        /// List of application Users. There's no constraint on uniqueness so be careful not to add additional
+        /// users. (We only need one user for this application).
+        /// </summary>
         public List<User> Users { get; set; }
-        public List<Ingredient> AllIngredients { get; set; } //same as exercises?
+        /// <summary>
+        /// List of all exercises read from allIngredients.txt (>400)
+        /// </summary>
+        public List<Ingredient> AllIngredients { get; set; }
     }
 }
