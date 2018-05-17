@@ -46,4 +46,8 @@
 }
 .grid-container{
     display:grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 10% auto 15%;
+    height: 100%;
 }
+
