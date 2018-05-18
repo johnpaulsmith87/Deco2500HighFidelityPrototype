@@ -15,9 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Diet\" />
-    <Folder Include="Views\Fitness\" />
-    <Folder Include="Views\History\" />
     <Folder Include="Views\Settings\" />
   </ItemGroup>
 

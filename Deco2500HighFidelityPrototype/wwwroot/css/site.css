@@ -55,8 +55,8 @@
     grid-column-end: span 2;
     
 }
-.grid-container div:nth-child(5) {
-    grid-column-end: span 2;
+.grid-container div:nth-child(4) {
+    grid-column-end: span 4;
 }
 
 #row1 {
@@ -67,4 +67,7 @@
 }
 #row3 {
     background-color: #bfff94;
+}
+#achieve {
+    
 }
