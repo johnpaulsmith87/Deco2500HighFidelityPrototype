@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 namespace Deco2500HighFidelityPrototype.Models.ViewModels
 {
-    public class DietIndexViewModel
+    public class HomeIndexViewModel
     {
-        public DietIndexViewModel(User user)
+        public HomeIndexViewModel(User user)
         {
             User = user;
         }

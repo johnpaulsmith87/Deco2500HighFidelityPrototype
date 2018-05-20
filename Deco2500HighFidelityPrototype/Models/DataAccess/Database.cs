@@ -23,7 +23,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
         /// some initial history.
         /// </summary>
         /// <param name="appRoot"> File path to the root directory of the application. Generate using IHostingEnvironment through dependency injection.</param>
-        public static async void SeedDatabase(string appRoot)
+        public static void SeedDatabase(string appRoot)
         {
             string[] exerciseLines;
             string[] ingredientLines;
@@ -35,10 +35,21 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
             try
             {
                 //generate ingredient/exercise database from files
-                exerciseLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, EXERCISE_FILE_PATH));
-                ingredientLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
-                var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand)));
-                var seedIngredients = ingredientLines.Distinct().Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand)));
+                exerciseLines = File.ReadAllLines(Path.Combine(appRoot, EXERCISE_FILE_PATH));
+                ingredientLines = File.ReadAllLines(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
+                //var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand), IdGenerator.GetId()));
+                List<Exercise> seedExercises = new List<Exercise>();
+                foreach(var line in exerciseLines)
+                {
+                    seedExercises.Add(new Exercise(line, GenerateRandomCaloriesPerUnit(rand), IdGenerator.GetId()));
+                }
+
+                List<Ingredient> seedIngredients = new List<Ingredient>();
+                foreach(var line in ingredientLines)
+                {
+                    seedIngredients.Add(new Ingredient(line, GenerateRandomCaloriesPerGram(rand), IdGenerator.GetId()));
+                }
+                // var seedIngredients = ingredientLines.Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand), IdGenerator.GetId()));
                 // now we can create a new user and fake history - then we save to db
                 var user = new User()
                 {
@@ -69,8 +80,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
 
                 var meal1 = new Meal()
                 {
-                    MealId = Guid.NewGuid(),
-                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                    MealId = IdGenerator.GetId(),
+                    IngredientsAndWeights = new List<(int IngredientId, decimal weightInGrams)>()
                         {
                             (chicken.IngredientId, 240.0m),
                             (broccoli.IngredientId, 100.5m),
@@ -79,8 +90,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 };
                 var meal2 = new Meal()
                 {
-                    MealId = Guid.NewGuid(),
-                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                    MealId = IdGenerator.GetId(),
+                    IngredientsAndWeights = new List<(int IngredientId, decimal weightInGrams)>()
                         {
                             (turkey.IngredientId, 150.0m),
                             (bacon.IngredientId, 80.5m),
@@ -90,8 +101,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 };
                 var meal3 = new Meal()
                 {
-                    MealId = Guid.NewGuid(),
-                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                    MealId = IdGenerator.GetId(),
+                    IngredientsAndWeights = new List<(int IngredientId, decimal weightInGrams)>()
                         {
                             (chicken.IngredientId, 240.0m),
                             (broccoli.IngredientId, 100.5m),
@@ -101,8 +112,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
 
                 var routine1 = new Routine()
                 {
-                    RoutineId = Guid.NewGuid(),
-                    Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
+                    RoutineId = IdGenerator.GetId(),
+                    Exercises = new List<(int ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
                         {
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:22:34")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:10:30"))
@@ -110,8 +121,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 };
                 var routine2 = new Routine()
                 {
-                    RoutineId = Guid.NewGuid(),
-                    Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
+                    RoutineId = IdGenerator.GetId(),
+                    Exercises = new List<(int ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
                         {
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:23:15")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:09:57")),
@@ -135,7 +146,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                     AllIngredients = seedIngredients.ToList()
                 };
                 //save to file~ fingers crossed! - code smell!
-                await SaveDatabase(database, appRoot);
+                SaveDatabase(database, appRoot);
             }
             catch (Exception e)
             {
@@ -162,21 +173,21 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
         /// </summary>
         /// <param name="dbToSave"> DatabaseModel to save to disk</param>
         /// <param name="appRoot">Pass in _env.ContentRootPath as the appRoot string parameter</param>
-        public static async Task SaveDatabase(DatabaseModel dbToSave, string appRoot)
+        public static void SaveDatabase(DatabaseModel dbToSave, string appRoot)
         {
             var jsonString = JsonConvert.SerializeObject(dbToSave, Formatting.Indented, new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });
-            await File.WriteAllTextAsync(Path.Combine(appRoot, DATABASE_FILE_PATH), jsonString);
+            File.WriteAllText(Path.Combine(appRoot, DATABASE_FILE_PATH), jsonString);
         }
         private static decimal GenerateRandomCaloriesPerGram(Random rand)
         {
-            return (decimal)(rand.NextDouble() * 10);
+            return (decimal)(rand.NextDouble() * 5);
         }
         private static decimal GenerateRandomCaloriesPerUnit(Random rand)
         {
-            return (decimal)(rand.NextDouble() * 7);
+            return (decimal)(rand.NextDouble() * 3);
         }
     }
     /// <summary>
