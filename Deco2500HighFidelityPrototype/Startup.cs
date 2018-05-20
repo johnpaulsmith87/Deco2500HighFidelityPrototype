@@ -26,8 +26,8 @@ namespace Deco2500HighFidelityPrototype
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
             Database.SeedDatabase(Environment.ContentRootPath);
+            //Database.SeedDatabase(Environment.ContentRootPath);
             services.AddSingleton(new ApplicationStateService(Environment.ContentRootPath));
             
         }
@@ -55,6 +55,15 @@ namespace Deco2500HighFidelityPrototype
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             
+        }
+    }
+
+    public static class IdGenerator
+    {
+        private static int _generator = 0;
+        public static int GetId()
+        {
+            return ++_generator;
         }
     }
 }

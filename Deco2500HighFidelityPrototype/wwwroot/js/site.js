@@ -8,11 +8,13 @@ $(function () {
 });
 
 function GetDietGraphData() {
-    var id = $("#dunnoYet").val(); // whatever I call the id for the thingy
-    var sendRequestTo = window.location.origin + POST_DIETGRAPH_URL + id;
+    var id = $("#userId").val(); // whatever I call the id for the thingy
+    var sendRequestTo = window.location.origin + POST_DIETGRAPH_URL;
     $.ajax({
         type: "POST",
         url: sendRequestTo,
+        dataType: "json",
+        data: {Id: id},
         success: MakeDietChart,
         error: AlertError
     });
@@ -24,6 +26,7 @@ function MakeDietChart(data) {
     var ctx = document.getElementById("dietGraph").getContext('2d');
     // do chart stuff - this is example code from chart.js docs
     // modify for our chart
+    var lemmeSee = data;
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
