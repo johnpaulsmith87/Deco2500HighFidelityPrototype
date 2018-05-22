@@ -37,8 +37,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
             var dietHistory = user.History.Where(h => h is DietHistory).Select(h => (DietHistory)h);
             var ingredients = _appState.AllIngredients;
             // now we want to package this to be easy on the front end
-            var result = dietHistory.Select(dh => new DietHistoryGraphItem(dh, ingredients));
-
+            var result = dietHistory.Select(dh => new DietHistoryGraphItem(dh, ingredients)).ToList();
             return result;
         }
 
@@ -54,12 +53,12 @@ namespace Deco2500HighFidelityPrototype.Controllers
         {
             decimal cal = 0;
             Ingredients = new List<string>();
-            foreach (var item in dH.Meal.IngredientsAndWeights)
+            foreach (var (IngredientId, weightInGrams) in dH.Meal.IngredientsAndWeights)
             {
-                Ingredient i = ingredients.Single(ing => ing.IngredientId == item.IngredientId);
+                Ingredient i = ingredients.Single(ing => ing.IngredientId == IngredientId);
                 //get ingredient name
                 Ingredients.Add(i.Name);
-                cal += i.CaloriesPerGram * item.weightInGrams;
+                cal += i.CaloriesPerGram * weightInGrams;
             }
             Calories = cal;
             Date = dH.EventDateTime;

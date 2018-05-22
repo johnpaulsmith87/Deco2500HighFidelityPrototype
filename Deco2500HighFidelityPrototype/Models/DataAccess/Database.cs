@@ -37,19 +37,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 //generate ingredient/exercise database from files
                 exerciseLines = File.ReadAllLines(Path.Combine(appRoot, EXERCISE_FILE_PATH));
                 ingredientLines = File.ReadAllLines(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
-                //var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand), IdGenerator.GetId()));
-                List<Exercise> seedExercises = new List<Exercise>();
-                foreach(var line in exerciseLines)
-                {
-                    seedExercises.Add(new Exercise(line, GenerateRandomCaloriesPerUnit(rand), IdGenerator.GetId()));
-                }
-
-                List<Ingredient> seedIngredients = new List<Ingredient>();
-                foreach(var line in ingredientLines)
-                {
-                    seedIngredients.Add(new Ingredient(line, GenerateRandomCaloriesPerGram(rand), IdGenerator.GetId()));
-                }
-                // var seedIngredients = ingredientLines.Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand), IdGenerator.GetId()));
+                var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand))).ToList();
+                var seedIngredients = ingredientLines.Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand))).Distinct().ToList();
                 // now we can create a new user and fake history - then we save to db
                 var user = new User()
                 {
@@ -80,8 +69,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
 
                 var meal1 = new Meal()
                 {
-                    MealId = IdGenerator.GetId(),
-                    IngredientsAndWeights = new List<(int IngredientId, decimal weightInGrams)>()
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                         {
                             (chicken.IngredientId, 240.0m),
                             (broccoli.IngredientId, 100.5m),
@@ -90,8 +79,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 };
                 var meal2 = new Meal()
                 {
-                    MealId = IdGenerator.GetId(),
-                    IngredientsAndWeights = new List<(int IngredientId, decimal weightInGrams)>()
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                         {
                             (turkey.IngredientId, 150.0m),
                             (bacon.IngredientId, 80.5m),
@@ -101,8 +90,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 };
                 var meal3 = new Meal()
                 {
-                    MealId = IdGenerator.GetId(),
-                    IngredientsAndWeights = new List<(int IngredientId, decimal weightInGrams)>()
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                         {
                             (chicken.IngredientId, 240.0m),
                             (broccoli.IngredientId, 100.5m),
@@ -112,8 +101,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
 
                 var routine1 = new Routine()
                 {
-                    RoutineId = IdGenerator.GetId(),
-                    Exercises = new List<(int ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
+                    RoutineId = Guid.NewGuid(),
+                    Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
                         {
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:22:34")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:10:30"))
@@ -121,8 +110,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 };
                 var routine2 = new Routine()
                 {
-                    RoutineId = IdGenerator.GetId(),
-                    Exercises = new List<(int ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
+                    RoutineId = Guid.NewGuid(),
+                    Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
                         {
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:23:15")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:09:57")),

@@ -11,11 +11,11 @@ namespace Deco2500HighFidelityPrototype.Models
         {
             // empty default constructor for serialization/deserialization
         }
-        public Exercise(string name, decimal caloriesPerUnit, int id)
+        public Exercise(string name, decimal caloriesPerUnit)
         {
             Name = name.TrimEnd();
             CaloriesPerUnit = caloriesPerUnit;
-            ExerciseId = id;
+            ExerciseId = Guid.NewGuid();
             if (DistanceTypeExcercises().Contains(name))
                 ExerciseType = ExerciseType.DistanceBased;
             else
@@ -27,7 +27,7 @@ namespace Deco2500HighFidelityPrototype.Models
 
         public decimal CaloriesPerUnit { get; set; }
 
-        public int ExerciseId { get; set; }
+        public Guid ExerciseId { get; set; }
 
         private static List<string> DistanceTypeExcercises() => new List<string>() {
                "Swim Backstroke",

@@ -5,21 +5,26 @@ using System.Threading.Tasks;
 
 namespace Deco2500HighFidelityPrototype.Models
 {
-    public class Ingredient
+    public class Ingredient : IEquatable<Ingredient>
     {
         public Ingredient()
         {
             //empty constructor for serialization/deserialization
         }
-        public Ingredient(string name, decimal caloriesPerGram, int id)
+        public Ingredient(string name, decimal caloriesPerGram)
         {
             //use some random math to assign calories per gram
             Name = name;
             CaloriesPerGram = caloriesPerGram;
-            IngredientId = id;
+            IngredientId = Guid.NewGuid();
         }
-        public int IngredientId { get; set; }
+        public Guid IngredientId { get; set; }
         public string Name { get; set; }
         public decimal CaloriesPerGram { get; set; }
+
+        public bool Equals(Ingredient other)
+        {
+            return Name == other.Name;
+        }
     }
 }
