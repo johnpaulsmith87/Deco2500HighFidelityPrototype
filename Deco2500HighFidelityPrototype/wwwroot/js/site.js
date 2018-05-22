@@ -1,6 +1,7 @@
 ﻿// Write your JavaScript code.
 $(function () {
-
+    var y = $(window).scrollTop();  //your current y position on the page
+    $(window).scrollTop(y + 150);
     //first check which page we're on!
     if ($("#dietGraph").length) {
         GetDietGraphData();

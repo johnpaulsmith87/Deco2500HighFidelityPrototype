@@ -8,42 +8,42 @@
 <div class="row3">
     @if (ctx == ScreenContext.Home)
     {
-        <i class="fas fa-home fa-6x selectedMenuItem"></i>
+        <a href="@Url.Action("Index","Home")"><i class="fas fa-home fa-6x selectedMenuItem"></i></a>
     }
     else
     {
-        <i class="fas fa-home fa-6x"></i>
+        <a href="@Url.Action("Index","Home")"><i class="fas fa-home fa-6x notSelected"></i></a>
     }
 </div>
 <div class="row3">
     @if (ctx == ScreenContext.Fitness)
     {
 
-        <i class="fas fa-dumbbell fa-6x selectedMenuItem"></i>
+        <a href="@Url.Action("Index","Fitness")"><i class="fas fa-dumbbell fa-6x selectedMenuItem"></i></a>
     }
     else
     {
-        <i class="fas fa-dumbbell fa-6x"></i>
+        <a href="@Url.Action("Index","Fitness")"><i class="fas fa-dumbbell fa-6x notSelected"></i></a>
     }
 </div>
 <div class="row3">
     @if (ctx == ScreenContext.Diet)
     {
-        <i class="fas fa-utensils fa-6x selectedMenuItem"></i>
+        <a href="@Url.Action("Index","Diet")"><i class="fas fa-utensils fa-6x selectedMenuItem"></i></a>
     }
     else
     {
-        <i class="fas fa-utensils fa-6x"></i>
+        <a href="@Url.Action("Index","Diet")"><i class="fas fa-utensils fa-6x notSelected"></i></a>
     }
 
 </div>
 <div class="row3">
     @if (ctx == ScreenContext.History)
     {
-        <i class="fas fa-history fa-6x selectedMenuItem"></i>
+        <a href="@Url.Action("Index","History")"><i class="fas fa-history fa-6x selectedMenuItem"></i></a>
     }
     else
     {
-        <i class="fas fa-history fa-6x"></i>
+        <a href="@Url.Action("Index","History")"><i class="fas fa-history fa-6x notSelected"></i></a>
     }
 </div>
