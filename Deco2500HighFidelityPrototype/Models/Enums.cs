@@ -10,4 +10,13 @@ namespace Deco2500HighFidelityPrototype.Models
         RepBased,
         DistanceBased
     }
+    public enum ScreenContext
+    {
+        Home,
+        Fitness,
+        Diet,
+        Settings,
+        History,
+        moremaybe       
+    }
 }

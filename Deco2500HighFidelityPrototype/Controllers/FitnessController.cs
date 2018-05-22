@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Deco2500HighFidelityPrototype.Models.DataAccess;
 using Deco2500HighFidelityPrototype.Models;
 using Deco2500HighFidelityPrototype.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Deco2500HighFidelityPrototype.Controllers
 {
@@ -40,7 +41,11 @@ namespace Deco2500HighFidelityPrototype.Controllers
             var result = fitnessHistory.Select(fh => new FitnessHistoryGraphItem(fh, exercises)).ToList();
             return result;
         }
-
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            ViewData["ScreenContext"] = ScreenContext.Fitness;
+            base.OnActionExecuting(context);
+        }
     }
     public class FitnessGraphReceiver
     {

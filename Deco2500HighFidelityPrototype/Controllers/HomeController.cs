@@ -8,6 +8,7 @@ using Deco2500HighFidelityPrototype.Models;
 using Deco2500HighFidelityPrototype.Models.DataAccess;
 using Microsoft.AspNetCore.Hosting;
 using Deco2500HighFidelityPrototype.Services;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Deco2500HighFidelityPrototype.Controllers
 {
@@ -33,6 +34,11 @@ namespace Deco2500HighFidelityPrototype.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            ViewData["ScreenContext"] = ScreenContext.Home;
+            base.OnActionExecuting(context);
         }
     }
 }
