@@ -1,6 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Index";
+    User user = Model.User as User;
 }
+
+<input type="hidden" id="userId" value="@user.Id" />
 <canvas id="fitnessGraph"></canvas>
