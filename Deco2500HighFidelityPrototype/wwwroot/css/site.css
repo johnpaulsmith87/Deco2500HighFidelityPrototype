@@ -44,12 +44,12 @@
     padding: 210px 40px 125px 50px;
     box-sizing: content-box;
 }
-.grid-container{
-    display:grid;
+.grid-container {
+    display: grid;
     grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: 7.5% auto 10%;
     height: 100%;
-
+    background-color: #bfff94;
 }
 .grid-container div:nth-child(2) {
     grid-column-end: span 2;
@@ -61,13 +61,19 @@
 
 #row1 {
     background-color: #bfff94;
+    align-self: center;
 }
 #row2 {
     background-color: #cfcdcc;
 }
 #row3 {
     background-color: #bfff94;
+    align-self: center;
 }
-#achieve {
-    
+#cog {
+    align-self: center;
+    background-color: #bfff94;
+    justify-self: end;
 }
+
+

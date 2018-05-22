@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Settings\" />
+    <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
   <ItemGroup>
