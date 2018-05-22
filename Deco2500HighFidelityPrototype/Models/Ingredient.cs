@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Deco2500HighFidelityPrototype.Models
 {
-    public class Ingredient
+    public class Ingredient : IEquatable<Ingredient>
     {
         public Ingredient()
         {
@@ -21,5 +21,10 @@ namespace Deco2500HighFidelityPrototype.Models
         public Guid IngredientId { get; set; }
         public string Name { get; set; }
         public decimal CaloriesPerGram { get; set; }
+
+        public bool Equals(Ingredient other)
+        {
+            return Name == other.Name;
+        }
     }
 }

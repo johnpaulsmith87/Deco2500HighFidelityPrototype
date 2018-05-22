@@ -23,7 +23,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
         /// some initial history.
         /// </summary>
         /// <param name="appRoot"> File path to the root directory of the application. Generate using IHostingEnvironment through dependency injection.</param>
-        public static async void SeedDatabase(string appRoot)
+        public static void SeedDatabase(string appRoot)
         {
             string[] exerciseLines;
             string[] ingredientLines;
@@ -35,10 +35,10 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
             try
             {
                 //generate ingredient/exercise database from files
-                exerciseLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, EXERCISE_FILE_PATH));
-                ingredientLines = await File.ReadAllLinesAsync(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
-                var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand)));
-                var seedIngredients = ingredientLines.Distinct().Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand)));
+                exerciseLines = File.ReadAllLines(Path.Combine(appRoot, EXERCISE_FILE_PATH));
+                ingredientLines = File.ReadAllLines(Path.Combine(appRoot, INGREDIENT_FILE_PATH));
+                var seedExercises = exerciseLines.Select(e => new Exercise(e, GenerateRandomCaloriesPerUnit(rand))).ToList();
+                var seedIngredients = ingredientLines.Select(i => new Ingredient(i, GenerateRandomCaloriesPerGram(rand))).Distinct().ToList();
                 // now we can create a new user and fake history - then we save to db
                 var user = new User()
                 {
@@ -135,7 +135,7 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                     AllIngredients = seedIngredients.ToList()
                 };
                 //save to file~ fingers crossed! - code smell!
-                await SaveDatabase(database, appRoot);
+                SaveDatabase(database, appRoot);
             }
             catch (Exception e)
             {
@@ -162,21 +162,21 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
         /// </summary>
         /// <param name="dbToSave"> DatabaseModel to save to disk</param>
         /// <param name="appRoot">Pass in _env.ContentRootPath as the appRoot string parameter</param>
-        public static async Task SaveDatabase(DatabaseModel dbToSave, string appRoot)
+        public static void SaveDatabase(DatabaseModel dbToSave, string appRoot)
         {
             var jsonString = JsonConvert.SerializeObject(dbToSave, Formatting.Indented, new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });
-            await File.WriteAllTextAsync(Path.Combine(appRoot, DATABASE_FILE_PATH), jsonString);
+            File.WriteAllText(Path.Combine(appRoot, DATABASE_FILE_PATH), jsonString);
         }
         private static decimal GenerateRandomCaloriesPerGram(Random rand)
         {
-            return (decimal)(rand.NextDouble() * 10);
+            return (decimal)(rand.NextDouble() * 5);
         }
         private static decimal GenerateRandomCaloriesPerUnit(Random rand)
         {
-            return (decimal)(rand.NextDouble() * 7);
+            return (decimal)(rand.NextDouble() * 3);
         }
     }
     /// <summary>

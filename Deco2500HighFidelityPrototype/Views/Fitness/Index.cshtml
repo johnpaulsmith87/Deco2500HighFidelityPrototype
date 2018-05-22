@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    User user = Model.User as User;
+}
+
+<input type="hidden" id="userId" value="@user.Id" />
+<canvas id="fitnessGraph"></canvas>
