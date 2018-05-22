@@ -8,6 +8,7 @@ using Deco2500HighFidelityPrototype.Services;
 using Deco2500HighFidelityPrototype.Models.DataAccess;
 using Deco2500HighFidelityPrototype.Models;
 using Deco2500HighFidelityPrototype.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Deco2500HighFidelityPrototype.Controllers
 {
@@ -40,7 +41,11 @@ namespace Deco2500HighFidelityPrototype.Controllers
             var result = dietHistory.Select(dh => new DietHistoryGraphItem(dh, ingredients)).ToList();
             return result;
         }
-
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            ViewData["ScreenContext"] = ScreenContext.Diet;
+            base.OnActionExecuting(context);
+        }
     }
     //POCOs for AJAX
     public class DietGraphReceiver

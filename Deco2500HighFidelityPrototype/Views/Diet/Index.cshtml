@@ -1,9 +1,16 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
-    User user = Model.User as User; 
+    User user = Model.User as User;
 }
+@await Html.PartialAsync("PhoneScreenTop")
 
-<input type="hidden" id="userId" value="@user.Id"/>
+@*
+    Put View specific code here!
+*@
+<input type="hidden" id="userId" value="@user.Id" />
 <canvas id="dietGraph"></canvas>
+@await Html.PartialAsync("PhoneScreenBottomMenu")
+
+
 

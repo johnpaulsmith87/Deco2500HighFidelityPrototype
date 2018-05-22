@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ScreenContext ctx = (ScreenContext)ViewData["ScreenContext"];
+}
+</div>
+<div class="row3">
+    @if (ctx == ScreenContext.Home)
+    {
+        <i class="fas fa-home fa-6x selectedMenuItem"></i>
+    }
+    else
+    {
+        <i class="fas fa-home fa-6x"></i>
+    }
+</div>
+<div class="row3">
+    @if (ctx == ScreenContext.Fitness)
+    {
+
+        <i class="fas fa-dumbbell fa-6x selectedMenuItem"></i>
+    }
+    else
+    {
+        <i class="fas fa-dumbbell fa-6x"></i>
+    }
+</div>
+<div class="row3">
+    @if (ctx == ScreenContext.Diet)
+    {
+        <i class="fas fa-utensils fa-6x selectedMenuItem"></i>
+    }
+    else
+    {
+        <i class="fas fa-utensils fa-6x"></i>
+    }
+
+</div>
+<div class="row3">
+    @if (ctx == ScreenContext.History)
+    {
+        <i class="fas fa-history fa-6x selectedMenuItem"></i>
+    }
+    else
+    {
+        <i class="fas fa-history fa-6x"></i>
+    }
+</div>

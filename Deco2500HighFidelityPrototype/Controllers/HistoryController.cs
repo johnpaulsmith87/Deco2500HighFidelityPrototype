@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Deco2500HighFidelityPrototype.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Deco2500HighFidelityPrototype.Models;
 using Deco2500HighFidelityPrototype.Models.DataAccess;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Deco2500HighFidelityPrototype.Controllers
 {
@@ -21,6 +23,11 @@ namespace Deco2500HighFidelityPrototype.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            ViewData["ScreenContext"] = ScreenContext.History;
+            base.OnActionExecuting(context);
         }
     }
 }
