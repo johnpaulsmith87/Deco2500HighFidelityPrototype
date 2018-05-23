@@ -19,4 +19,9 @@ namespace Deco2500HighFidelityPrototype.Models
         History,
         moremaybe       
     }
+    public enum HistoryType
+    {
+        Fitness,
+        Diet
+    }
 }

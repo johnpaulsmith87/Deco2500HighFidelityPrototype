@@ -1,7 +1,31 @@
+@{
+    HomeIndexViewModel vm = Model as HomeIndexViewModel;
+    var pF = Math.Round(vm.PercentOfDailyWorkTime * 100, 1);
+    var pD = Math.Round(vm.PercentOfDailyDietGoalCalories * 100, 1);
+}
+
 @await Html.PartialAsync("PhoneScreenTop")
 
 @*
-    Put View specific code here!    
+    Put View specific code here!
 *@
-
+<div class="homeGrid">
+    <div class="homeWelcomeMessage">
+        <h2>Welcome back @vm.Username!</h2>
+    </div>
+    <div class="homeFitnessGraph">
+        <canvas id="welcomeGraph"></canvas>
+    </div>
+    <div class="homeFitnessGraphMessage">
+        <h3>You have reached @pF% of your fitness daily workout goal.</h3>
+    </div>
+    <div class="homeDietGraph">
+        <canvas id="welcomeGraph2"></canvas>
+    </div>
+    <div class="homeDietGraphMessage">
+        <h3>You have reached @pD% of your daily diet goal.</h3>
+    </div>
+</div>
+<input type="hidden" id="percentDiet" value="@vm.PercentOfDailyDietGoalCalories" />
+<input type="hidden" id="percentFit" value="@vm.PercentOfDailyWorkTime" />
 @await Html.PartialAsync("PhoneScreenBottomMenu")

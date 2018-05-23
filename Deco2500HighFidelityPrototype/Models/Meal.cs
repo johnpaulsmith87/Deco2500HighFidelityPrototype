@@ -9,5 +9,6 @@ namespace Deco2500HighFidelityPrototype.Models
     {
         public Guid MealId { get; set; }
         public List<(Guid IngredientId, decimal weightInGrams)> IngredientsAndWeights { get; set; }
+        public string Name { get; set; }
     }
 }

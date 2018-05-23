@@ -1,9 +1,96 @@
-﻿
+﻿@{
+    List<HistoryViewModelItem> vm = Model as List<HistoryViewModelItem>;
+}
 
 @await Html.PartialAsync("PhoneScreenTop")
 
 @*
     Put View specific code here!
 *@
+<ul class="nav nav-pills mb-3 myNavStyle" id="pills-tab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-home" aria-selected="true">All History</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="pills-fitness-tab" data-toggle="pill" href="#pills-fitness" role="tab" aria-controls="pills-fitness" aria-selected="false">Fitness History</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="pills-diet-tab" data-toggle="pill" href="#pills-diet" role="tab" aria-controls="pills-diet" aria-selected="false">Diet History</a>
+    </li>
+</ul>
+<div class="tab-content myTabContentStyle" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            @foreach (var item in vm)
+            {
+                <tr>
+                    <td>@item.DateTime.ToString("G")</td>
+                    <td>@item.Type.ToString("G")</td>
+                    <td>@item.Name</td>
+                    @if (item.Type == HistoryType.Diet)
+                    {
+                        <td>Calories consumed: @item.Calories</td>
+                    }
+                    else
+                    {
+                        <td>Calories spend: @item.Calories Time spend: @item.TimeSpent.ToString("c")</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="tab-pane fade" id="pills-fitness" role="tabpanel" aria-labelledby="pills-fitness-tab">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            @foreach (var item in vm.Where(i => i.Type == HistoryType.Fitness).ToList())
+            {
+                <tr>
+                    <td>@item.DateTime.ToString("G")</td>
+                    <td>@item.Type.ToString("G")</td>
+                    <td>@item.Name</td>
+                    <td>Calories spend: @item.Calories Time spend: @item.TimeSpent.ToString("c")</td>
+                </tr>
+
+            }
+        </table>
+    </div>
+    <div class="tab-pane fade" id="pills-diet" role="tabpanel" aria-labelledby="pills-diet-tab">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            @foreach (var item in vm.Where(i => i.Type == HistoryType.Diet).ToList())
+            {
+                <tr>
+                    <td>@item.DateTime.ToString("G")</td>
+                    <td>@item.Type.ToString("G")</td>
+                    <td>@item.Name</td>
+                    <td>Calories consumed: @item.Calories</td>
+
+                </tr>
+            }
+        </table>
+    </div>
+</div>
 
 @await Html.PartialAsync("PhoneScreenBottomMenu")

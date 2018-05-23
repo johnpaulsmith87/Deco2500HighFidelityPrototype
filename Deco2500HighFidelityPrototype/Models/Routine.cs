@@ -9,5 +9,6 @@ namespace Deco2500HighFidelityPrototype.Models
     {
         public Guid RoutineId { get; set; }
         public List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)> Exercises { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -89,4 +89,51 @@
 }
 .notSelected{
     color:black !important;
+
+}
+#welcomeGraph {
+    margin-left: -115px;
+    margin-top: 50px;
+}
+#welcomeGraph2 {
+    margin-left: -115px;
+    margin-top: 50px;
+}
+.homeGrid {
+    display: grid;
+    grid-template-columns: 66% 34%;
+    grid-template-rows: 7.5% 46.25% 46.25%;
+    height: 100%;
+    grid-template-areas:
+        "welcome welcome"
+        "fitGraph fitMessage"
+        "dietGraph dietMessage";
+}
+.homeWelcomeMessage{
+    grid-area: welcome;
+    justify-self: center;
+    align-self: center;
+}
+.homeFitnessGraph{
+    grid-area: fitGraph;
+}
+.homeFitnessGraphMessage{
+    grid-area: fitMessage;
+    align-self: center;
+}
+.homeDietGraph{
+    grid-area: dietGraph;
+}
+.homeDietGraphMessage{
+    grid-area: dietMessage;
+    align-self:center;
+    padding-right: 5px;
+}
+.myNavStyle {
+    justify-content: center;
+    font-size: 25px;
+    margin-top: 15px;
+}
+.myTabContentStyle{
+    font-size:18px;
 }
