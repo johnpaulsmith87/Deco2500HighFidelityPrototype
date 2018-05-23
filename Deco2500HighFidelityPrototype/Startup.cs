@@ -8,7 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Deco2500HighFidelityPrototype.Models.DataAccess;
 using Deco2500HighFidelityPrototype.Services;
-
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Deco2500HighFidelityPrototype
 {
@@ -35,6 +36,13 @@ namespace Deco2500HighFidelityPrototype
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var supportedCultures = new[] { new CultureInfo("en-AU") };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-AU"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             if (env.IsDevelopment())
             {
