@@ -159,8 +159,8 @@ function MakeWelcomeFitnessChart() {
             datasets: [{
                 data: [percent, goal],
                 backgroundColor: [
-                    '#efe334',
-                    '#bf31d8'
+                    '#FAA43A',
+                    '#5DA5DA'   
                 ]
             }]
         },

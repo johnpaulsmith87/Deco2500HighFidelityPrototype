@@ -127,4 +127,13 @@
 .homeDietGraphMessage{
     grid-area: dietMessage;
     align-self:center;
+    padding-right: 5px;
+}
+.myNavStyle {
+    justify-content: center;
+    font-size: 25px;
+    margin-top: 15px;
+}
+.myTabContentStyle{
+    font-size:18px;
 }
