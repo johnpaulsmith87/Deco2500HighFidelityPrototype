@@ -7,10 +7,12 @@ namespace Deco2500HighFidelityPrototype.Models.ViewModels
 {
     public class HomeIndexViewModel
     {
-        public HomeIndexViewModel(User user)
-        {
-            User = user;
-        }
-        public User User { get; private set; }
+        public string Username { get; set; }
+        public string UserId { get; set; }
+
+        public decimal PercentOfDailyDietGoalCalories { get; set; }
+        public decimal PercentOfDailyWorkTime { get; set; }
+                    
+      
     }
 }

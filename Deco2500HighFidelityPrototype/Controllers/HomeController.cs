@@ -23,8 +23,16 @@ namespace Deco2500HighFidelityPrototype.Controllers
         }
         public IActionResult Index(Guid? id)
         {
-            
-            var healthyIngredients = _appState.AllIngredients.Where(i => i.CaloriesPerGram < 3.4m); // use appState for displaying data to the frontend
+
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var user = db.Users.FirstOrDefault();
+            var dHistory = user.History.Where(h => h is DietHistory).Select(h => (DietHistory)h).OrderByDescending(h => h.EventDateTime).ToList();
+            var fHistory = user.History.Where(h => h is FitnessHistory).Select(h => (FitnessHistory)h).OrderByDescending(h => h.EventDateTime).ToList();
+
+            var goalTime = TimeSpan.Parse("00:40:00");
+            var goalCalories = 2300M;
+
+
             //example code for saving to database
             //always use _env.ContentRootPath -> points to wwwroot. the file path constants I use in 
             //dataaccess jump up one folder then look for the txts and json

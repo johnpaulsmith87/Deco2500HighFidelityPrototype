@@ -61,11 +61,18 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                 var rice = seedIngredients.First(i => i.Name == "rice");
                 var bread = seedIngredients.First(i => i.Name == "bread");
                 var mayonnaise = seedIngredients.First(i => i.Name == "mayonnaise");
+                var beef = seedIngredients.First(i => i.Name == "beef");
+                var beans = seedIngredients.First(i => i.Name == "baked beans");
+                var salmon = seedIngredients.First(i => i.Name == "salmon");
+                var cereal = seedIngredients.First(i => i.Name == "cereal");
+                var milk = seedIngredients.First(i => i.Name == "milk");
 
                 //exercises
                 var runTreadmill = seedExercises.First(e => e.Name.Contains("Run Treadmill"));
                 var pushUp = seedExercises.First(e => e.Name.Contains("Push Up"));
                 var curl = seedExercises.First(e => e.Name.Contains("Curl & Press Dumbbells"));
+                var swim = seedExercises.First(e => e.Name == "Swim Freestyle");
+                var chinUp = seedExercises.First(e => e.Name == "Chin Up");
 
                 var meal1 = new Meal()
                 {
@@ -75,7 +82,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                             (chicken.IngredientId, 240.0m),
                             (broccoli.IngredientId, 100.5m),
                             (rice.IngredientId, 205.5m)
-                        }
+                        },
+                    Name = "Chicken, broccoli and rice"
                 };
                 var meal2 = new Meal()
                 {
@@ -86,19 +94,61 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                             (bacon.IngredientId, 80.5m),
                             (bread.IngredientId, 150.5m),
                             (mayonnaise.IngredientId, 25m)
-                        }
+                        },
+                    Name = "Turkey BLT"
                 };
                 var meal3 = new Meal()
                 {
                     MealId = Guid.NewGuid(),
                     IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                         {
-                            (chicken.IngredientId, 240.0m),
-                            (broccoli.IngredientId, 100.5m),
-                            (rice.IngredientId, 205.5m)
-                        }
+                            (cereal.IngredientId, 100m),
+                            (milk.IngredientId, 200m)
+                        },
+                    Name = "Breakfast cereal with milk"
                 };
-
+                var meal4 = new Meal()
+                {
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                        {
+                            (cereal.IngredientId, 100m),
+                            (milk.IngredientId, 200m)
+                        },
+                    Name = "Breakfast cereal with milk"
+                };
+                var meal5 = new Meal()
+                {
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                        {
+                            (beef.IngredientId, 200m),
+                            (rice.IngredientId, 100m),
+                            (beans.IngredientId, 50m)
+                        },
+                    Name = "Beef, beans and rice"
+                };
+                var meal6 = new Meal()
+                {
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                        {
+                            (salmon.IngredientId, 200m),
+                            (broccoli.IngredientId, 100m),
+                            (beans.IngredientId, 50m)
+                        },
+                    Name = "Salmon, broccoli and beans"
+                };
+                var meal7 = new Meal()
+                {
+                    MealId = Guid.NewGuid(),
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                        {
+                            (cereal.IngredientId, 100m),
+                            (milk.IngredientId, 200m)
+                        },
+                    Name = "Breakfast cereal with milk"
+                };
                 var routine1 = new Routine()
                 {
                     RoutineId = Guid.NewGuid(),
@@ -106,7 +156,8 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                         {
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:22:34")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:10:30"))
-                        }
+                        },
+                    Name = "Run and pushups - the usual"
                 };
                 var routine2 = new Routine()
                 {
@@ -116,16 +167,33 @@ namespace Deco2500HighFidelityPrototype.Models.DataAccess
                             (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:23:15")),
                             (pushUp.ExerciseId, 100m, TimeSpan.Parse("00:09:57")),
                             (curl.ExerciseId, 30m, TimeSpan.Parse("00:06:23"))
-                        }
+                        },
+                    Name = "the usual plus bicep curls"
+                };
+                var routine3 = new Routine()
+                {
+                    RoutineId = Guid.NewGuid(),
+                    Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>()
+                        {
+                            (runTreadmill.ExerciseId, 5000m, TimeSpan.Parse("00:23:15")),
+                            (swim.ExerciseId, 1000m, TimeSpan.Parse("00:20:57"))
+                        },
+                    Name = "Swim and a run"
                 };
                 //Now use these to create histories
+                //wrote this code around ~3 pm... should test around that time too lol
                 user.History = new List<IHistory>
                     {
-                        new DietHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(3), Meal = meal1 },
-                        new DietHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(2), Meal = meal2 },
-                        new DietHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(1), Meal = meal3 },
-                        new FitnessHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(3), RoutinePerformed = routine1 },
-                        new FitnessHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(1), RoutinePerformed = routine2 }
+                        new DietHistory() {UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(2) - TimeSpan.FromHours(7), Meal = meal3},
+                        new DietHistory() {UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(2) - TimeSpan.FromHours(3), Meal = meal2},
+                        new DietHistory() {UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(2) + TimeSpan.FromHours(3), Meal = meal1},
+                        new DietHistory() {UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(1) - TimeSpan.FromHours(7), Meal = meal4},
+                        new DietHistory() {UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(1) - TimeSpan.FromHours(3), Meal = meal6},
+                        new DietHistory() {UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(1) + TimeSpan.FromHours(3), Meal = meal5},
+                        new DietHistory() {UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromHours(7), Meal = meal7},
+                        new FitnessHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(2), RoutinePerformed = routine3 },
+                        new FitnessHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromDays(1), RoutinePerformed = routine2 },
+                        new FitnessHistory() { UserId = user.Id, EventDateTime = DateTime.Now - TimeSpan.FromHours(2), RoutinePerformed = routine1 }
                     };
                 //create database object
                 var database = new DatabaseModel()
