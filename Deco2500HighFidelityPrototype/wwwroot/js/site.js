@@ -9,6 +9,12 @@ $(function () {
     if ($("#fitnessGraph").length) {
         GetFitnessGraphData();
     }
+    if ($("#welcomeGraph").length) {
+        MakeWelcomeFitnessChart();
+    }
+    if ($("#welcomeGraph2").length) {
+        MakeWelcomeDietChart();
+    }
 });
 
 function GetDietGraphData() {
@@ -18,7 +24,7 @@ function GetDietGraphData() {
         type: "POST",
         url: sendRequestTo,
         dataType: "json",
-        data: {Id: id},
+        data: { Id: id },
         success: MakeDietChart,
         error: AlertError
     });
@@ -135,6 +141,72 @@ function MakeFitnessChart(data) {
                         beginAtZero: true
                     }
                 }]
+            }
+        }
+    });
+}
+function MakeWelcomeFitnessChart() {
+    // data will be a list sent from the server
+    var ctx = document.getElementById("welcomeGraph").getContext('2d');
+    // do chart stuff - this is example code from chart.js docs
+    // modify for our chart
+    var percent = $("#percentFit").val() * 100;
+    var goal = 100 - percent;
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ["Time Spent Exercising", "Daily Fitness Goal Remaining"],
+            datasets: [{
+                data: [percent, goal],
+                backgroundColor: [
+                    '#efe334',
+                    '#bf31d8'
+                ]
+            }]
+        },
+        options: {
+            animation: {
+                animateRotate: true
+            },
+            rotation: Math.PI * 3/2,
+            legend: {
+                labels: {
+                    fontSize: 16,
+                    fontFamily: "Segoe UI"
+                }
+            }
+        }
+    });
+}
+function MakeWelcomeDietChart() {
+    // data will be a list sent from the server
+    var ctx = document.getElementById("welcomeGraph2").getContext('2d');
+    // do chart stuff - this is example code from chart.js docs
+    // modify for our chart
+    var percent = $("#percentDiet").val() * 100;
+    var goal = 100 - percent;
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ["Calories Consumed Today", "Daily Diet Goal Remaining"],
+            datasets: [{
+                data: [percent, goal],
+                backgroundColor: [
+                    '#4858e2',
+                    "#c92031"
+                ]
+            }]
+        },
+        options: {
+            animation: {
+                animateRotate: true
+            },
+            rotation: Math.PI * 3/2,
+            legend: {
+                labels: {
+                    fontSize: 16,
+                    fontFamily: "Segoe UI"
+                }
             }
         }
     });

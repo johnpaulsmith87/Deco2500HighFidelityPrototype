@@ -8,10 +8,10 @@ namespace Deco2500HighFidelityPrototype.Models.ViewModels
     public class HomeIndexViewModel
     {
         public string Username { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         public decimal PercentOfDailyDietGoalCalories { get; set; }
-        public decimal PercentOfDailyWorkTime { get; set; }
+        public decimal PercentOfDailyWorkTime { get;set; }
                     
       
     }
