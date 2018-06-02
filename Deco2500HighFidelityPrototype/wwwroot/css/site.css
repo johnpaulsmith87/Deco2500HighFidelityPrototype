@@ -71,6 +71,7 @@
     align-self: center;
     justify-self: center;
     background-color: lavender;
+    padding-top:3px;
 }
 .cog {
     align-self: center;
@@ -136,4 +137,12 @@
 }
 .myTabContentStyle{
     font-size:18px;
+}
+.bottomMenuIconText{
+    text-align: center;
+    font-size:22px;
+    color:black !important;
+}
+.fa-5half{
+    font-size:5.5em;
 }
