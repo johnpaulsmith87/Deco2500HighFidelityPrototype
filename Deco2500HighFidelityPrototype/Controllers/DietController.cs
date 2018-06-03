@@ -36,28 +36,49 @@ namespace Deco2500HighFidelityPrototype.Controllers
         public IActionResult ChooseMeal()
         {
             var db = Database.GetDatabase(_env.ContentRootPath);
+            var ingredients = _appState.AllIngredients;
             var user = db.Users.FirstOrDefault();
-            var last3Meals = user.History
+            var last3Meals = user.History.AsParallel()
                 .Where(h => h is DietHistory)
-                .Select(h => ((DietHistory)h).Meal)
+                .Select(h => new DietHistoryGraphItem((DietHistory)h, ingredients))
                 .TakeLast(3).ToList();
-            var steak = db.AllIngredients.Where(i => i.Name == "steak");
-            var asparagus = db.AllIngredients.Where(i => i.Name == "aspargus");
-            var bacon = db.AllIngredients.Where(i => i.Name == "bacon");
-            var haddock = db.AllIngredients.Where(i => i.Name == "haddock");
-            var spinach = db.AllIngredients.Where(i => i.Name == "spinach");
+            var steak = ingredients.Where(i => i.Name == "steak").FirstOrDefault();
+            var asparagus = ingredients.Where(i => i.Name == "aspargus").FirstOrDefault();
+            var bacon = ingredients.Where(i => i.Name == "bacon").FirstOrDefault();
+            var haddock = ingredients.Where(i => i.Name == "haddock").FirstOrDefault();
+            var spinach = ingredients.Where(i => i.Name == "spinach").FirstOrDefault();
             var suggestedMeal1 = new Meal()
             {
                 MealId = Guid.NewGuid(),
                 Name = "Steak and asparagus",
                 IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
                 {
-
+                    (steak.IngredientId, 300M),
+                    (asparagus.IngredientId, 150M)
                 }
             };
-
+            var suggestedMeal2 = new Meal()
+            {
+                MealId = Guid.NewGuid(),
+                Name = "Haddock, bacon and spinach",
+                IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                {
+                    (haddock.IngredientId, 200M),
+                    (bacon.IngredientId, 100M),
+                    (spinach.IngredientId, 100M)
+                }
+            };
+            var vm = new ChooseMealViewModel()
+            {
+                HistoricalMeals = last3Meals,
+                SuggestedMeals = new List<DietHistoryGraphItem>()
+                {
+                    new DietHistoryGraphItem(new DietHistory(){ Meal = suggestedMeal1 }, ingredients),
+                    new DietHistoryGraphItem(new DietHistory() { Meal = suggestedMeal2 }, ingredients)
+                }
+            };
             ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.ChooseMeal;
-            return View();
+            return View(vm);
         }
         public IActionResult CreateMeal()
         {
