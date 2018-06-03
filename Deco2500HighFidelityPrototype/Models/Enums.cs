@@ -18,7 +18,8 @@ namespace Deco2500HighFidelityPrototype.Models
         Diet = 1 << 2,
         Settings =  1 << 3,
         History = 1 << 4,
-        CanGoBack = 1 << 5       // |= if you can't go back!
+        AddMeal = 1 << 5,
+        CanGoBack = 1 << 6       // |= if you can go back
     }
     public enum HistoryType
     {

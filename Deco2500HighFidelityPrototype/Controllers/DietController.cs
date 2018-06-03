@@ -30,7 +30,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
         }
         public IActionResult AddMeal()
         {
-            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack;
+            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.AddMeal;
             return View();
         }
         //Diet/GetDietGraphData/id?
