@@ -28,6 +28,11 @@ namespace Deco2500HighFidelityPrototype.Controllers
             //get user from database
             return View(vm);
         }
+        public IActionResult AddMeal()
+        {
+            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CantGoBack;
+            return View();
+        }
         //Diet/GetDietGraphData/id?
         [HttpPost]
         public IEnumerable<DietHistoryGraphItem> GetDietGraphData(DietGraphReceiver data)
@@ -70,7 +75,6 @@ namespace Deco2500HighFidelityPrototype.Controllers
         }
         public decimal Calories { get; set; }
         public DateTime Date { get; set; }
-
         public List<string> Ingredients { get; set; }
     }
 }

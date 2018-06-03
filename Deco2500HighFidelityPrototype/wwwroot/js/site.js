@@ -52,6 +52,7 @@ function MakeDietChart(data) {
     var labels = [];
     var displayData = [];
     var dates = [];
+    
     for (var i = 0; i < data.length; i++) {
         labels[i] = "";
         for (var j = 0; j < data[i].ingredients.length; j++) {
@@ -61,28 +62,32 @@ function MakeDietChart(data) {
         labels[i] = labels[i].substring(0, labels[i].length - 1);
         displayData[i] = data[i].calories;
     }
+    
+    data.forEach(meal => dates.push(moment(meal.date)));
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels:dates,
             datasets: [{
                 label: 'Calories',
                 data: displayData,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)'
                 ],
                 borderWidth: 1
             }]
@@ -92,6 +97,14 @@ function MakeDietChart(data) {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            day: 'MMM D'
+                        }
                     }
                 }]
             },
@@ -214,4 +227,3 @@ function MakeWelcomeDietChart() {
 function AlertError(xhr, status, error) {
     //do nothing for now
 }
-

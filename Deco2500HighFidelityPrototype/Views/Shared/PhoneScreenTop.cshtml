@@ -6,27 +6,34 @@
 
 }
 <div class="backArrow">
-    <i class="fas fa-arrow-left fa-5x"></i>
+    @if (!ctx.HasFlag(ScreenContext.CantGoBack))
+    {
+        <i class="fas fa-arrow-left fa-5x backHistory"></i>
+    }
 </div>
 <div class="row1">
-    @switch (ctx)
+
+    @if (ctx.HasFlag(ScreenContext.Home))
     {
-        case ScreenContext.Home:
-            <span class="ScreenTitle">Home</span>
-            break;
-        case ScreenContext.Settings:
-            <span class="ScreenTitle">Settings</span>
-            break;
-        case ScreenContext.Fitness:
-            <span class="ScreenTitle">Fitness</span>
-            break;
-        case ScreenContext.Diet:
-            <span class="ScreenTitle">Diet</span>
-            break;
-        case ScreenContext.History:
-            <span class="ScreenTitle">History</span>
-            break;
+        <span class="ScreenTitle">Home</span>
     }
+    else if (ctx.HasFlag(ScreenContext.Settings))
+    {
+        <span class="ScreenTitle">Settings</span>
+    }
+    else if (ctx.HasFlag(ScreenContext.Fitness))
+    {
+        <span class="ScreenTitle">Fitness</span>
+    }
+    else if (ctx.HasFlag(ScreenContext.Diet))
+    {
+        <span class="ScreenTitle">Diet</span>
+    }
+    else if (ctx.HasFlag(ScreenContext.History))
+    {
+        <span class="ScreenTitle">History</span>
+    }
+
 </div>
 <div class="cog">
 
