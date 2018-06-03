@@ -6,7 +6,7 @@
 
 }
 <div class="backArrow">
-    @if (!ctx.HasFlag(ScreenContext.CantGoBack))
+    @if (ctx.HasFlag(ScreenContext.CanGoBack))
     {
         <i class="fas fa-arrow-left fa-5x backHistory"></i>
     }

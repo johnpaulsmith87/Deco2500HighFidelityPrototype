@@ -143,3 +143,15 @@
     font-size:22px;
     color:black !important;
 }
+.addMeal{
+    font-size: 28px;
+    padding-right: 25px;
+}
+.buttonInline{
+    display:flex;
+    align-items:center;
+}
+.addMealMargin{
+    margin-top: 50px;
+    margin-left: 50px;
+}

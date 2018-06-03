@@ -72,22 +72,22 @@ function MakeDietChart(data) {
                 label: 'Calories',
                 data: displayData,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
+                    '#47d179',
+                    '#47d179',
+                    '#47d179',
+                    '#47d179',
+                    '#47d179',
+                    '#47d179',
+                    '#47d179'
                 ],
                 borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)'
+                    '#28a745',
+                    '#28a745',
+                    '#28a745',
+                    '#28a745',
+                    '#28a745',
+                    '#28a745',
+                    '#28a745'
                 ],
                 borderWidth: 1
             }]
@@ -110,7 +110,15 @@ function MakeDietChart(data) {
             },
             title: {
                 display: true,
-                text: "Recent Diet Results"
+                text: "Last 5 Meals",
+                fontSize: 16,
+                fontFamily: "Segoe UI"
+            },
+            legend: {
+                labels: {
+                    fontSize: 16,
+                    fontFamily: "Segoe UI"
+                }
             }
         }
     });

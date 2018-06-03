@@ -30,7 +30,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
         }
         public IActionResult AddMeal()
         {
-            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CantGoBack;
+            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack;
             return View();
         }
         //Diet/GetDietGraphData/id?
@@ -40,7 +40,11 @@ namespace Deco2500HighFidelityPrototype.Controllers
             //works but we need to precalc meal stuff
             var db = Database.GetDatabase(_env.ContentRootPath);
             var user = db.Users.SingleOrDefault(u => u.Id == data.Id);
-            var dietHistory = user.History.Where(h => h is DietHistory).Select(h => (DietHistory)h);
+            var dietHistory = user.History
+                .Where(h => h is DietHistory)
+                .Select(h => (DietHistory)h)
+                .Take(5)
+                .ToList();
             var ingredients = _appState.AllIngredients;
             // now we want to package this to be easy on the front end
             var result = dietHistory.Select(dh => new DietHistoryGraphItem(dh, ingredients)).ToList();
