@@ -33,6 +33,37 @@ namespace Deco2500HighFidelityPrototype.Controllers
             ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.AddMeal;
             return View();
         }
+        public IActionResult ChooseMeal()
+        {
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var user = db.Users.FirstOrDefault();
+            var last3Meals = user.History
+                .Where(h => h is DietHistory)
+                .Select(h => ((DietHistory)h).Meal)
+                .TakeLast(3).ToList();
+            var steak = db.AllIngredients.Where(i => i.Name == "steak");
+            var asparagus = db.AllIngredients.Where(i => i.Name == "aspargus");
+            var bacon = db.AllIngredients.Where(i => i.Name == "bacon");
+            var haddock = db.AllIngredients.Where(i => i.Name == "haddock");
+            var spinach = db.AllIngredients.Where(i => i.Name == "spinach");
+            var suggestedMeal1 = new Meal()
+            {
+                MealId = Guid.NewGuid(),
+                Name = "Steak and asparagus",
+                IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>()
+                {
+
+                }
+            };
+
+            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.ChooseMeal;
+            return View();
+        }
+        public IActionResult CreateMeal()
+        {
+            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.CreateMeal;
+            return View();
+        }
         //Diet/GetDietGraphData/id?
         [HttpPost]
         public IEnumerable<DietHistoryGraphItem> GetDietGraphData(DietGraphReceiver data)

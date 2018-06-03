@@ -150,14 +150,17 @@
 .buttonInline{
     display:flex;
     align-items:center;
-    flex-direction:column;
 }
 .addMealMargin{
     margin-top: 50px;
     margin-left: 50px;
 }
 .addMealButtons {
-    border: 1px solid black;
     font-size: 36px;
     margin-top: 75px;
+}
+.addMealButtonsContainer {
+    display: flex;
+    align-items: center;
+    flex-direction:column;
 }
