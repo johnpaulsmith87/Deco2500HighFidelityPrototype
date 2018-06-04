@@ -1,36 +1,101 @@
 ﻿@{
     ChooseMealViewModel vm = Model as ChooseMealViewModel;
+    string hiddenInputString1 = string.Empty;
+    string hiddenInputString2 = string.Empty;
+    string hiddenInputString3 = vm.HistoricalMeals[0].Meal.MealId.ToString();
+    string hiddenInputString4 = vm.HistoricalMeals[1].Meal.MealId.ToString();
+    string hiddenInputString5 = vm.HistoricalMeals[2].Meal.MealId.ToString();
+    for (int i = 0; i < vm.SuggestedMeals[0].Ingredients.Count; i++)
+    {
+
+        hiddenInputString1 += "_" + vm.SuggestedMeals[0].Meal.IngredientsAndWeights[i].IngredientId
+            + "_" + vm.SuggestedMeals[0].Meal.IngredientsAndWeights[i].weightInGrams;
+    }
+    for (int i = 0; i < vm.SuggestedMeals[0].Ingredients.Count; i++)
+    {
+
+        hiddenInputString2 += "_" + vm.SuggestedMeals[1].Meal.IngredientsAndWeights[i].IngredientId
+            + "_" + vm.SuggestedMeals[1].Meal.IngredientsAndWeights[i].weightInGrams;
+    }
 }
 @await Html.PartialAsync("PhoneScreenTop")
 
 <div class="well-lg">
     <!-- suggested meals -->
-    <div>
-        <button type="button" class="btn btn-outline-dark btn-lg btn-block">
-            
+    <h1 style="text-align:center">Suggested meals </h1>
+    <div class="well-lg mealChooser">
+        <button type="button" class="btn btn-outline-dark btn-lg btn-block mealChooserButton">
+            <span class="mealChooserName"><u>Name:</u><b> @vm.SuggestedMeals[0].Name</b></span>
+            <span class="mealChooserCalories"><u>Calories:</u><b> @Math.Round(vm.SuggestedMeals[0].Calories, 1)</b></span>
+            <span class="mealChooserIngredients">
+                Ingredients:&nbsp;
+                @foreach (var i in vm.SuggestedMeals[0].Ingredients)
+                {
+                    <span>@i&nbsp;</span>
+                }
+            </span>
         </button>
+        <input type="hidden" value="@hiddenInputString1" />
     </div>
-    <div>
-        <button type="button" class="btn btn-outline-dark btn-lg btn-block">
-            Block level button
+    <div class="well-lg mealChooser">
+        <button type="button" class="btn btn-outline-dark btn-lg btn-block mealChooserButton">
+            <span class="mealChooserName"><u>Name:</u><b> @vm.SuggestedMeals[1].Name</b></span>
+            <span class="mealChooserCalories"><u>Calories:</u><b> @Math.Round(vm.SuggestedMeals[1].Calories, 1)</b></span>
+            <span class="mealChooserIngredients">
+                Ingredients:&nbsp;
+                @foreach (var i in vm.SuggestedMeals[1].Ingredients)
+                {
+                    <span>@i&nbsp;</span>
+                }
+            </span>
         </button>
+        <input type="hidden" value="@hiddenInputString2" />
     </div>
     <hr />
+    <h1 style="text-align:center">Last 3 meals</h1>
     <!-- historical meals -->
-    <div>
-        <button type="button" class="btn btn-outline-dark btn-lg btn-block">
-            Block level button
+    <div class="well-lg mealChooser">
+        <button type="button" class="btn btn-outline-dark btn-lg btn-block mealChooserButton">
+            <span class="mealChooserName"><u>Name:</u><b> @vm.HistoricalMeals[0].Name</b></span>
+            <span class="mealChooserCalories"><u>Calories:</u><b> @Math.Round(vm.HistoricalMeals[0].Calories, 1)</b></span>
+            <span class="mealChooserIngredients">
+                Ingredients:&nbsp;
+                @foreach (var i in vm.HistoricalMeals[0].Ingredients)
+                {
+                    <span>@i&nbsp;</span>
+                }
+            </span>
         </button>
+        <input type="hidden" value="@hiddenInputString3" />
     </div>
-    <div>
-        <button type="button" class="btn btn-outline-dark btn-lg btn-block">
-            Block level button
+    <div class="well-lg mealChooser">
+        <button type="button" class="btn btn-outline-dark btn-lg btn-block mealChooserButton">
+            <span class="mealChooserName"><u>Name:</u><b> @vm.HistoricalMeals[1].Name</b></span>
+            <span class="mealChooserCalories"><u>Calories:</u><b> @Math.Round(vm.HistoricalMeals[1].Calories, 1)</b></span>
+            <span class="mealChooserIngredients">
+                Ingredients:&nbsp;
+                @foreach (var i in vm.HistoricalMeals[1].Ingredients)
+                {
+                    <span>@i&nbsp;</span>
+                }
+            </span>
+
         </button>
+        <input type="hidden" value="@hiddenInputString4" />
     </div>
-    <div>
-        <button type="button" class="btn btn-outline-dark btn-lg btn-block">
-            Block level button
+    <div class="well-lg mealChooser">
+        <button type="button" class="btn btn-outline-dark btn-lg btn-block mealChooserButton">
+            <span class="mealChooserName"><u>Name:</u><b> @vm.HistoricalMeals[2].Name</b></span>
+            <span class="mealChooserCalories"><u>Calories:</u><b> @Math.Round(vm.HistoricalMeals[2].Calories, 1)</b></span>
+            <span class="mealChooserIngredients">
+                Ingredients:&nbsp;
+                @foreach (var i in vm.HistoricalMeals[2].Ingredients)
+                {
+                    <span>@i&nbsp;</span>
+                }
+            </span>
         </button>
+        <input type="hidden" value="@hiddenInputString5" />
     </div>
 </div>
 

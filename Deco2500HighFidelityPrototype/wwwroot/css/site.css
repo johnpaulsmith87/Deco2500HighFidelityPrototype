@@ -164,3 +164,22 @@
     align-items: center;
     flex-direction:column;
 }
+.mealChooserButton{
+    display:grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    grid-template-areas:
+        "name calories"
+        "ingredients ingredients";
+}
+.mealChooserName{
+    grid-area: name;
+    justify-self: left;
+}
+.mealChooserCalories{
+    grid-area: calories;
+    justify-self: left;
+}
+.mealChooserIngredients{
+    grid-area: ingredients;
+}

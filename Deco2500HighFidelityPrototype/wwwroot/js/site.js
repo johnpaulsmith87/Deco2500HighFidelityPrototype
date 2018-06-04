@@ -15,6 +15,11 @@ $(function () {
     if ($("#welcomeGraph2").length) {
         MakeWelcomeDietChart();
     }
+    if ($(".mealChooserButton").length) {
+        $(".mealChooserButton").on("click", function () {
+            SendMealChoice($(this).next().val())
+        })
+    }
 });
 
 function GetDietGraphData() {
@@ -31,7 +36,7 @@ function GetDietGraphData() {
 }
 function GetFitnessGraphData() {
     var id = $("#userId").val(); // whatever I call the id for the thingy
-    var sendRequestTo = window.location.origin + POST_DIETGRAPH_URL;
+    var sendRequestTo = window.location.origin + POST_FITNESSGRAPH_URL;
     $.ajax({
         type: "POST",
         url: sendRequestTo,
@@ -41,8 +46,20 @@ function GetFitnessGraphData() {
         error: AlertError
     });
 }
+function SendMealChoice(message) {
+    var sendRequestTo = window.location.origin + POST_CHOOSEMEAL_URL;
+    $.ajax({
+        type: "POST",
+        url: sendRequestTo,
+        dataType: "json",
+        data: { Message: message },
+        success: MakeFitnessChart,
+        error: AlertError
+    });
+}
 var POST_DIETGRAPH_URL = "/Diet/GetDietGraphData/";
-var POST_FITNESSGRAPH_URL = "/Diet/GetFitnessGraphData/";
+var POST_FITNESSGRAPH_URL = "/Fitness/GetFitnessGraphData/";
+var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/"
 function MakeDietChart(data) {
     // data will be a list sent from the server
     var ctx = document.getElementById("dietGraph").getContext('2d');
