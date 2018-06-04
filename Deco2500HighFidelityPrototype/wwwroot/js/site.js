@@ -48,18 +48,22 @@ function GetFitnessGraphData() {
 }
 function SendMealChoice(message) {
     var sendRequestTo = window.location.origin + POST_CHOOSEMEAL_URL;
+    var mealDetails = window.location.origin + POST_MEALDETAILS_URL;
     $.ajax({
         type: "POST",
         url: sendRequestTo,
         dataType: "json",
         data: { Message: message },
-        success: MakeFitnessChart,
+        success:  () =>
+            window.location.replace(mealDetails)
+        ,
         error: AlertError
     });
 }
 var POST_DIETGRAPH_URL = "/Diet/GetDietGraphData/";
 var POST_FITNESSGRAPH_URL = "/Fitness/GetFitnessGraphData/";
-var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/"
+var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/";
+var POST_MEALDETAILS_URL = "/Diet/MealDetails/";
 function MakeDietChart(data) {
     // data will be a list sent from the server
     var ctx = document.getElementById("dietGraph").getContext('2d');

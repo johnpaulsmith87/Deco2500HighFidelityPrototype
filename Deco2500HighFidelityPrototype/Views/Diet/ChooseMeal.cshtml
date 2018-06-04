@@ -1,7 +1,7 @@
 ﻿@{
     ChooseMealViewModel vm = Model as ChooseMealViewModel;
-    string hiddenInputString1 = string.Empty;
-    string hiddenInputString2 = string.Empty;
+    string hiddenInputString1 = vm.SuggestedMeals[0].Name;
+    string hiddenInputString2 = vm.SuggestedMeals[1].Name;
     string hiddenInputString3 = vm.HistoricalMeals[0].Meal.MealId.ToString();
     string hiddenInputString4 = vm.HistoricalMeals[1].Meal.MealId.ToString();
     string hiddenInputString5 = vm.HistoricalMeals[2].Meal.MealId.ToString();
@@ -11,7 +11,7 @@
         hiddenInputString1 += "_" + vm.SuggestedMeals[0].Meal.IngredientsAndWeights[i].IngredientId
             + "_" + vm.SuggestedMeals[0].Meal.IngredientsAndWeights[i].weightInGrams;
     }
-    for (int i = 0; i < vm.SuggestedMeals[0].Ingredients.Count; i++)
+    for (int i = 0; i < vm.SuggestedMeals[1].Ingredients.Count; i++)
     {
 
         hiddenInputString2 += "_" + vm.SuggestedMeals[1].Meal.IngredientsAndWeights[i].IngredientId

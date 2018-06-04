@@ -39,7 +39,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
             var db = Database.GetDatabase(_env.ContentRootPath);
             var ingredients = _appState.AllIngredients;
             var user = db.Users.FirstOrDefault();
-            var last3Meals = user.History.AsParallel()
+            var last3Meals = user.History
                 .Where(h => h is DietHistory)
                 .Select(h => (DietHistory)h)
                 .Select(h => new DietHistoryGraphItem(h, ingredients, h.Meal.Name))
@@ -89,7 +89,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
             var result = data.Message.Split("_");
             //open db!
             var db = Database.GetDatabase(_env.ContentRootPath);
-
+            var user = db.Users.FirstOrDefault();
             if (result.Length == 1)
             {
                 //guid parse
@@ -97,20 +97,74 @@ namespace Deco2500HighFidelityPrototype.Controllers
                 // fetch details from db
                 // create new meal with new timestamp stc...
                 // save to db!
+                var hMeal = db.Users.FirstOrDefault()
+                    .History
+                    .OfType<DietHistory>()
+                    .Single(m => m.Meal.MealId == mealGuid);
+                var newMeal = new Meal()
+                {
+                    Name = hMeal.Meal.Name,
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>
+                    (hMeal.Meal.IngredientsAndWeights),
+                    MealId = Guid.NewGuid()
+                };
+                var newDH = new DietHistory()
+                {
+                    Meal = newMeal,
+                    EventDateTime = DateTime.Now,
+                    UserId = user.Id
+                };
+                db.Users[0].History.Add(newDH);
+                Database.SaveDatabase(db, _env.ContentRootPath);
             }
             else
             {
-                Guid[] ingredientGuids = new Guid[result.Length / 2];
-                decimal[] weights = new decimal[result.Length / 2];
+                string name = result[0];
+                List<Guid> ingredientGuids = new List<Guid>();
+                List<decimal> weights = new List<decimal>();
+                for(int i = 1; i < result.Length; i++)
+                {
+                    if((i & 1) == 1)
+                    {
+                        ingredientGuids.Add(Guid.Parse(result[i]));
+                    }
+                    else
+                    {
+                        weights.Add(decimal.Parse(result[i]));
+                    }
+                }
+                List<(Guid i, decimal w)> ps = new List<(Guid i, decimal w)>();
+                for(int j = 0; j < ingredientGuids.Count; j++)
+                {
+                    ps.Add((ingredientGuids[j], weights[j]));
+                }
                 //use the ingredient weights and guids to construct a new meal
                 // save to db
+                var newMeal = new Meal()
+                {
+                    Name = name,
+                    IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>(ps),
+                    MealId = Guid.NewGuid()
+                };
+                var newDH = new DietHistory()
+                {
+                    Meal = newMeal,
+                    EventDateTime = DateTime.Now,
+                    UserId = user.Id
+                };
+                db.Users[0].History.Add(newDH);
+                Database.SaveDatabase(db, _env.ContentRootPath);
             }
 
-            return null;
+            return Json(new { });
         }
         public IActionResult CreateMeal()
         {
             ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.CreateMeal;
+            return View();
+        }
+        public IActionResult MealDetails()
+        {
             return View();
         }
         //Diet/GetDietGraphData/id?
