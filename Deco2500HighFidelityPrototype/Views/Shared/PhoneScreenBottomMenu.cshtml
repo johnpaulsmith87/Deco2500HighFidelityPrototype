@@ -6,7 +6,7 @@
 }
 </div>
 <div class="row3">
-    @if (ctx == ScreenContext.Home)
+    @if (ctx.HasFlag(ScreenContext.Home))
     {
         <a href="@Url.Action("Index","Home")">
             <i class="fas fa-home fa-6x selectedMenuItem">
@@ -25,7 +25,7 @@
     }
 </div>
 <div class="row3">
-    @if (ctx == ScreenContext.Fitness)
+    @if (ctx.HasFlag(ScreenContext.Fitness))
     {
 
         <a href="@Url.Action("Index","Fitness")">
@@ -44,10 +44,10 @@
     }
 </div>
 <div class="row3">
-    @if (ctx == ScreenContext.Diet)
+    @if (ctx.HasFlag(ScreenContext.Diet))
     {
         <a href="@Url.Action("Index","Diet")">
-            <i class="fas fa-utensils fa-5half selectedMenuItem">
+            <i class="fas fa-utensils fa-6x selectedMenuItem">
             </i>
             <div class="bottomMenuIconText">Diet</div>
         </a>
@@ -55,7 +55,7 @@
     else
     {
         <a href="@Url.Action("Index","Diet")">
-            <i class="fas fa-utensils fa-5half notSelected">
+            <i class="fas fa-utensils fa-6x notSelected">
             </i>
             <div class="bottomMenuIconText">Diet</div>
         </a>
@@ -63,7 +63,7 @@
 
 </div>
 <div class="row3">
-    @if (ctx == ScreenContext.History)
+    @if (ctx.HasFlag(ScreenContext.History))
     {
         <a href="@Url.Action("Index","History")">
             <i class="fas fa-history fa-6x selectedMenuItem"></i>

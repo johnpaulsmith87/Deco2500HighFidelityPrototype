@@ -10,14 +10,19 @@ namespace Deco2500HighFidelityPrototype.Models
         RepBased,
         DistanceBased
     }
+    [Flags]
     public enum ScreenContext
     {
-        Home,
-        Fitness,
-        Diet,
-        Settings,
-        History,
-        moremaybe       
+        Home = 1 << 0,
+        Fitness = 1 << 1,
+        Diet = 1 << 2,
+        Settings =  1 << 3,
+        History = 1 << 4,
+        AddMeal = 1 << 5,
+        ChooseMeal = 1 << 6,
+        CreateMeal = 1 << 7,
+        MealDetails = 1 << 8,
+        CanGoBack = 1 << 9      // | if you can go back
     }
     public enum HistoryType
     {

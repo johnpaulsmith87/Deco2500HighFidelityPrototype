@@ -34,115 +34,243 @@
     }
 }
 
-.smartphone{
-    height:1689px;
-    width:817px;
-    background-image:url(../images/smartphonecutoutTemplate.png);
+.smartphone {
+    height: 1689px;
+    width: 817px;
+    background-image: url(../images/smartphonecutoutTemplate.png);
 }
-.screen{
-    height:1250px;
+
+.screen {
+    height: 1250px;
     padding: 210px 40px 125px 50px;
     box-sizing: content-box;
 }
+
 .grid-container {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: 7.5% auto 10%;
     height: 100%;
-    background-color:lavender;
+    background-color: lavender;
 }
-.grid-container div:nth-child(2) {
-    grid-column-end: span 2;
-    
-}
-.grid-container div:nth-child(4) {
-    grid-column-end: span 4;
-}
+
+    .grid-container div:nth-child(2) {
+        grid-column-end: span 2;
+    }
+
+    .grid-container div:nth-child(4) {
+        grid-column-end: span 4;
+    }
 
 .row1 {
     align-self: center;
     justify-self: center;
     background-color: lavender;
 }
+
 .row2 {
-    background-color:white;
+    background-color: white;
+    overflow-y: auto;
 }
+
 .row3 {
     align-self: center;
     justify-self: center;
     background-color: lavender;
-    padding-top:3px;
+    padding-top: 3px;
 }
+
 .cog {
     align-self: center;
     justify-self: end;
     background-color: lavender;
 }
+
 .selectedMenuItem {
-    color:tomato;
+    color: tomato;
 }
-.ScreenTitle{
+
+.ScreenTitle {
     font-size: 50px;
 }
-.backArrow{
-    align-self:center;
+
+.backArrow {
+    align-self: center;
     padding-left: 3px;
 }
-.notSelected{
-    color:black !important;
 
+.notSelected {
+    color: black !important;
 }
+
 #welcomeGraph {
     margin-left: -115px;
     margin-top: 50px;
 }
+
 #welcomeGraph2 {
     margin-left: -115px;
     margin-top: 50px;
 }
+
 .homeGrid {
     display: grid;
     grid-template-columns: 66% 34%;
     grid-template-rows: 7.5% 46.25% 46.25%;
     height: 100%;
-    grid-template-areas:
-        "welcome welcome"
-        "fitGraph fitMessage"
-        "dietGraph dietMessage";
+    grid-template-areas: "welcome welcome" "fitGraph fitMessage" "dietGraph dietMessage";
 }
-.homeWelcomeMessage{
+
+.homeWelcomeMessage {
     grid-area: welcome;
     justify-self: center;
     align-self: center;
 }
-.homeFitnessGraph{
+
+.homeFitnessGraph {
     grid-area: fitGraph;
 }
-.homeFitnessGraphMessage{
+
+.homeFitnessGraphMessage {
     grid-area: fitMessage;
     align-self: center;
 }
-.homeDietGraph{
+
+.homeDietGraph {
     grid-area: dietGraph;
 }
-.homeDietGraphMessage{
+
+.homeDietGraphMessage {
     grid-area: dietMessage;
-    align-self:center;
+    align-self: center;
     padding-right: 5px;
 }
+
 .myNavStyle {
     justify-content: center;
     font-size: 25px;
     margin-top: 15px;
 }
-.myTabContentStyle{
-    font-size:18px;
+
+.myTabContentStyle {
+    font-size: 18px;
 }
-.bottomMenuIconText{
+
+.bottomMenuIconText {
     text-align: center;
-    font-size:22px;
-    color:black !important;
+    font-size: 22px;
+    color: black !important;
 }
-.fa-5half{
-    font-size:5.5em;
+
+.addMeal {
+    font-size: 28px;
+    padding-right: 25px;
+}
+
+.buttonInline {
+    display: flex;
+    align-items: center;
+}
+
+.addMealMargin {
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.addMealButtons {
+    font-size: 36px;
+    margin-top: 75px;
+}
+
+.addMealButtonsContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.mealChooserButton {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    grid-template-areas: "name calories" "ingredients ingredients";
+}
+
+.mealChooserName {
+    grid-area: name;
+    justify-self: left;
+}
+
+.mealChooserCalories {
+    grid-area: calories;
+    justify-self: left;
+}
+
+.mealChooserIngredients {
+    grid-area: ingredients;
+}
+
+.bigFont {
+    font-size: 28px;
+}
+
+.ingItem {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tomato {
+    color: tomato;
+    margin-left: 3px;
+}
+
+.ui-menu-item {
+    font-size: 24px;
+    font-family: 'Segoe UI';
+}
+
+#currentIngredientList {
+    width: 100%;
+}
+
+.weightAmount {
+    width: 150px;
+}
+
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+}
+::-webkit-scrollbar-thumb {
+    background: #e1e1e1;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+}
+::-webkit-scrollbar-thumb:active {
+    background: #000000;
+}
+::-webkit-scrollbar-track {
+    background: #666666;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+    background: #666666;
+}
+::-webkit-scrollbar-track:active {
+    background: #333333;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+.detailsTable{
+    width: 100%;
+    height: auto;
+    font-size: 26px;
 }

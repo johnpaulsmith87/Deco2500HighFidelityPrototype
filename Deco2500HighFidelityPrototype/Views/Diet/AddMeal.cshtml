@@ -1,0 +1,12 @@
+﻿@await Html.PartialAsync("PhoneScreenTop")
+<div class="addMealButtonsContainer" >
+        <a class=" btn btn-outline-dark btn-lg addMealButtons " href="@Url.Action("ChooseMeal","Diet")">
+            <span>Choose From App</span>
+        </a>
+    
+
+        <a class=" btn btn-outline-dark btn-lg addMealButtons" href="@Url.Action("CreateMeal","Diet")">
+            <span>Create New Meal</span>
+        </a>    
+</div>
+@await Html.PartialAsync("PhoneScreenBottomMenu")
