@@ -31,14 +31,21 @@ $(function () {
         else {
             //gather ingredients from places!
             var ingredients = [];
-            $("#hiddenIngredientsList").children().each(function () {
-                ingredients.append($(this).val());
+            var name = "New Meal"
+            if ($("#mealName").val() != "") {
+                name = $("#mealName").val();
+            }
+            $("#hiddenIngredientsList").children().each(function (i) {
+                ingredients[i] = $(this).val();
             });
             $.ajax({
                 type: "POST",
                 url: window.location.origin + POST_CREATEMEAL_URL,
                 dataType: "json",
-                data: { ingredients: ingredients },
+                data: {
+                    ingredients: ingredients,
+                    name: name
+                },
                 success: function () {
                     window.location.href = window.location.origin + POST_MEALDETAILS_URL;
                 },
@@ -76,11 +83,11 @@ $(function () {
                     $("#currentIngredientList")
                         .append('<li class="list-group-item bigFont ingItem"> <span>'
                         + ui.item.label +
-                        '</span><span> <input type="number" id="ingInputId_'
+                        '</span><span> <span>weight(g):</span> <input type="number" id="ingInputId_'
                         + numIngredients +
-                        '" class="weightAmount" placeholder="0.00"  min="5" value="0" step="0.01" /><i class="fas fa-ban tomato"></i></span></li>');
+                        '" class="weightAmount" min="1.0" value="1.0" step="0.01" /><i class="fas fa-ban tomato"></i></span></li>');
                     $("#hiddenIngredientsList")
-                        .append('<input type="hidden" id="idIng' + numIngredients + '" value="' + ui.item.value + '_' + '0" />');
+                        .append('<input type="hidden" id="idIng' + numIngredients + '" value="' + ui.item.value + '_' + '1.0" />');
 
                     $('.weightAmount').on('change', function () {
                         var id = $(this)[0].id;

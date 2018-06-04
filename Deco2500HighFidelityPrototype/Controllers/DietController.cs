@@ -122,9 +122,9 @@ namespace Deco2500HighFidelityPrototype.Controllers
                 string name = result[0];
                 List<Guid> ingredientGuids = new List<Guid>();
                 List<decimal> weights = new List<decimal>();
-                for(int i = 1; i < result.Length; i++)
+                for (int i = 1; i < result.Length; i++)
                 {
-                    if((i & 1) == 1)
+                    if ((i & 1) == 1)
                     {
                         ingredientGuids.Add(Guid.Parse(result[i]));
                     }
@@ -134,7 +134,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
                     }
                 }
                 List<(Guid i, decimal w)> ps = new List<(Guid i, decimal w)>();
-                for(int j = 0; j < ingredientGuids.Count; j++)
+                for (int j = 0; j < ingredientGuids.Count; j++)
                 {
                     ps.Add((ingredientGuids[j], weights[j]));
                 }
@@ -170,28 +170,54 @@ namespace Deco2500HighFidelityPrototype.Controllers
         [HttpPost]
         public IActionResult CreateMeal(CreateMealReceiver data)
         {
-            List<(Guid id, decimal weight)> meal = new List<(Guid id, decimal weight)>();
-            foreach(var ingredient in data.ingredients)
+            List<(Guid id, decimal weight)> ps = new List<(Guid id, decimal weight)>();
+            foreach (var ingredient in data.ingredients)
             {
                 var result = ingredient.Split("_");
-                meal.Add((Guid.Parse(result[0]), decimal.Parse(result[1])));
+                ps.Add((Guid.Parse(result[0]), decimal.Parse(result[1])));
             }
-            return null;
+            //create new meal object
+            var newMeal = new Meal()
+            {
+                IngredientsAndWeights = new List<(Guid IngredientId, decimal weightInGrams)>(ps),
+                MealId = Guid.NewGuid(),
+                Name = data.name
+            };
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var user = db.Users.First();
+            var dietHistory = new DietHistory()
+            {
+                Meal = newMeal,
+                EventDateTime = DateTime.Now,
+                UserId = user.Id
+            };
+            db.Users[0].History.Add(dietHistory);
+            Database.SaveDatabase(db, _env.ContentRootPath);
+            //save to db
+            return Json(new { });
         }
         [HttpPost]
         public IEnumerable<IngredientAutocompleteItem> GetAllIngredients(ChooseMealReceiver data)
         {
             return _appState.AllIngredients
-                .Where(i => i.Name.StartsWith(data.Message,StringComparison.OrdinalIgnoreCase))
+                .Where(i => i.Name.StartsWith(data.Message, StringComparison.OrdinalIgnoreCase))
                 .Select(i => new IngredientAutocompleteItem()
                 {
                     label = i.Name,
                     value = i.IngredientId
                 });
-    }
+        }
         public IActionResult MealDetails()
         {
-            return View();
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var user = db.Users[0];
+            var lastMeal = user.History.OfType<DietHistory>()
+                .ToList()
+                .OrderByDescending(h => h.EventDateTime)
+                .Select(h => new DietHistoryGraphItem(h, _appState.AllIngredients, h.Meal.Name))
+                .FirstOrDefault();
+            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.MealDetails;
+            return View(lastMeal);
         }
         //Diet/GetDietGraphData/id?
         [HttpPost]
@@ -227,6 +253,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
     }
     public class CreateMealReceiver
     {
+        public string name { get; set; }
         public string[] ingredients { get; set; }
     }
     public class IngredientAutocompleteItem
@@ -251,7 +278,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
             Date = dH.EventDateTime;
             Name = name;
             Meal = dH.Meal;
-            
+
         }
         public decimal Calories { get; set; }
         public DateTime Date { get; set; }
