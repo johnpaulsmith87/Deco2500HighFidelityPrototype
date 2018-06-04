@@ -1,7 +1,19 @@
-﻿
-@{
-    ViewData["Title"] = "CreateMeal";
-}
+﻿@await Html.PartialAsync("PhoneScreenTop")
 
-<h2>CreateMeal</h2>
-
+<div class="">
+    <!-- select ingredients -->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text bigFont" id="basic-addon1">Ingredient</span>
+        </div>
+        <input type="text" id="ingredientAutocomplete" class="form-control bigFont" placeholder="Pick an ingredient..." aria-label="Pick an ingredient..." aria-describedby="basic-addon1">
+    </div>
+    <!-- displaying current ingredients input box for amount -->
+    <ul class="list-group" id="currentIngredientList"></ul>
+    <div id="hiddenIngredientsList">
+        
+    </div>
+    <!-- submit button -->
+    <button class="btn btn-outline-secondary bigFont" type="button">Submit</button>
+</div>
+@await Html.PartialAsync("PhoneScreenBottomMenu")

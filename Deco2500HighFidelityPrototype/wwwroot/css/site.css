@@ -183,3 +183,6 @@
 .mealChooserIngredients{
     grid-area: ingredients;
 }
+.bigFont{
+    font-size: 28px;
+}

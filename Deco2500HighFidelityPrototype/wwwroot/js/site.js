@@ -20,6 +20,56 @@ $(function () {
             SendMealChoice($(this).next().val())
         })
     }
+    if ($('#ingredientAutocomplete').length) {
+        $('#ingredientAutocomplete').autocomplete({
+            source: (request, response) => {
+                $.ajax({
+                    type: "POST",
+                    url: window.location.origin + GET_ALLINGREDIENTS_URL,
+                    data: { Message: request.term },
+                    dataType: "json",
+                    success: (data) => {
+                        response(data);
+                    },
+                    error: AlertError
+                });
+
+            },
+            minLength: 2,
+            delay: 100,
+            select: (event, ui) => {
+                event.preventDefault();
+                var match = false;
+                var currentChildren = $("#hiddenIngredientsList").children();
+                for (var i = 0; i < $(currentChildren).length; i++){
+                    var test = "bla";
+                    if ($(currentChildren[i]).val().includes(ui.item.value))
+                        match = true;
+                }
+                if (!match) {
+                    $("#currentIngredientList")
+                        .append('<li class="list-group-item bigFont">' + ui.item.label + '</li>');
+                    $("#hiddenIngredientsList")
+                        .append('<input type="hidden" value="' + ui.item.value + '_' + '0" />');
+                }
+                $(this).val(ui.item.label);
+                //return false;
+            },
+            change: function (ev, ui) {
+                if (ui.item) {
+                    $(this).val('');
+                }
+            },
+            focus: function (event, ui) {
+                $(this).val() = ui.item.label;
+                // or $('#autocomplete-input').val(ui.item.label);
+
+                // Prevent the default focus behavior.
+                event.preventDefault();
+                // or return false;
+            }
+        })
+    }
 });
 
 function GetDietGraphData() {
@@ -54,7 +104,7 @@ function SendMealChoice(message) {
         url: sendRequestTo,
         dataType: "json",
         data: { Message: message },
-        success:  () =>
+        success: () =>
             window.location.replace(mealDetails)
         ,
         error: AlertError
@@ -64,6 +114,7 @@ var POST_DIETGRAPH_URL = "/Diet/GetDietGraphData/";
 var POST_FITNESSGRAPH_URL = "/Fitness/GetFitnessGraphData/";
 var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/";
 var POST_MEALDETAILS_URL = "/Diet/MealDetails/";
+var GET_ALLINGREDIENTS_URL = "/Diet/GetAllIngredients/";
 function MakeDietChart(data) {
     // data will be a list sent from the server
     var ctx = document.getElementById("dietGraph").getContext('2d');
@@ -73,7 +124,7 @@ function MakeDietChart(data) {
     var labels = [];
     var displayData = [];
     var dates = [];
-    
+
     for (var i = 0; i < data.length; i++) {
         labels[i] = "";
         for (var j = 0; j < data[i].ingredients.length; j++) {
@@ -83,12 +134,12 @@ function MakeDietChart(data) {
         labels[i] = labels[i].substring(0, labels[i].length - 1);
         displayData[i] = data[i].calories;
     }
-    
+
     data.forEach(meal => dates.push(moment(meal.date)));
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels:dates,
+            labels: dates,
             datasets: [{
                 label: 'Calories',
                 data: displayData,
@@ -202,7 +253,7 @@ function MakeWelcomeFitnessChart() {
                 data: [percent, goal],
                 backgroundColor: [
                     '#FAA43A',
-                    '#5DA5DA'   
+                    '#5DA5DA'
                 ]
             }]
         },
@@ -210,7 +261,7 @@ function MakeWelcomeFitnessChart() {
             animation: {
                 animateRotate: true
             },
-            rotation: Math.PI * 3/2,
+            rotation: Math.PI * 3 / 2,
             legend: {
                 labels: {
                     fontSize: 16,
@@ -243,7 +294,7 @@ function MakeWelcomeDietChart() {
             animation: {
                 animateRotate: true
             },
-            rotation: Math.PI * 3/2,
+            rotation: Math.PI * 3 / 2,
             legend: {
                 labels: {
                     fontSize: 16,

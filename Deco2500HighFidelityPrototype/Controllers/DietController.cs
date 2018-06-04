@@ -161,8 +161,23 @@ namespace Deco2500HighFidelityPrototype.Controllers
         public IActionResult CreateMeal()
         {
             ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.CreateMeal;
-            return View();
+            var vm = new CreateMealViewModel()
+            {
+                Ingredients = new List<Ingredient>(_appState.AllIngredients)
+            };
+            return View(vm);
         }
+        [HttpPost]
+        public IEnumerable<IngredientAutocompleteItem> GetAllIngredients(ChooseMealReceiver data)
+        {
+            return _appState.AllIngredients
+                .Where(i => i.Name.StartsWith(data.Message,StringComparison.OrdinalIgnoreCase))
+                .Select(i => new IngredientAutocompleteItem()
+                {
+                    label = i.Name,
+                    value = i.IngredientId
+                });
+    }
         public IActionResult MealDetails()
         {
             return View();
@@ -198,6 +213,11 @@ namespace Deco2500HighFidelityPrototype.Controllers
     public class ChooseMealReceiver
     {
         public string Message { get; set; }
+    }
+    public class IngredientAutocompleteItem
+    {
+        public Guid value { get; set; }
+        public string label { get; set; }
     }
     public class DietHistoryGraphItem
     {
