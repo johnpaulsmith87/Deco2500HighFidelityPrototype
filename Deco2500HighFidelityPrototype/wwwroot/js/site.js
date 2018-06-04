@@ -2,6 +2,8 @@
 $(function () {
     var y = $(window).scrollTop();  //your current y position on the page
     $(window).scrollTop(y + 150);
+    var boundWeightEvent = false;
+    var numIngredients = 0;
     //first check which page we're on!
     if ($("#dietGraph").length) {
         GetDietGraphData();
@@ -18,8 +20,33 @@ $(function () {
     if ($(".mealChooserButton").length) {
         $(".mealChooserButton").on("click", function () {
             SendMealChoice($(this).next().val())
-        })
+        });
     }
+    $("#noIngredientSelected").hide();
+
+    $("#createMealButton").on('click', function () {
+        if (numIngredients == 0) {
+            $("#noIngredientSelected").show().delay(5000).fadeOut();
+        }
+        else {
+            //gather ingredients from places!
+            var ingredients = [];
+            $("#hiddenIngredientsList").children().each(function () {
+                ingredients.append($(this).val());
+            });
+            $.ajax({
+                type: "POST",
+                url: window.location.origin + POST_CREATEMEAL_URL,
+                dataType: "json",
+                data: { ingredients: ingredients },
+                success: function () {
+                    window.location.href = window.location.origin + POST_MEALDETAILS_URL;
+                },
+                error: AlertError
+            })
+        }
+    });
+
     if ($('#ingredientAutocomplete').length) {
         $('#ingredientAutocomplete').autocomplete({
             source: (request, response) => {
@@ -41,16 +68,37 @@ $(function () {
                 event.preventDefault();
                 var match = false;
                 var currentChildren = $("#hiddenIngredientsList").children();
-                for (var i = 0; i < $(currentChildren).length; i++){
-                    var test = "bla";
+                for (var i = 0; i < $(currentChildren).length; i++) {
                     if ($(currentChildren[i]).val().includes(ui.item.value))
                         match = true;
                 }
                 if (!match) {
                     $("#currentIngredientList")
-                        .append('<li class="list-group-item bigFont">' + ui.item.label + '</li>');
+                        .append('<li class="list-group-item bigFont ingItem"> <span>'
+                        + ui.item.label +
+                        '</span><span> <input type="number" id="ingInputId_'
+                        + numIngredients +
+                        '" class="weightAmount" placeholder="0.00"  min="5" value="0" step="0.01" /><i class="fas fa-ban tomato"></i></span></li>');
                     $("#hiddenIngredientsList")
-                        .append('<input type="hidden" value="' + ui.item.value + '_' + '0" />');
+                        .append('<input type="hidden" id="idIng' + numIngredients + '" value="' + ui.item.value + '_' + '0" />');
+
+                    $('.weightAmount').on('change', function () {
+                        var id = $(this)[0].id;
+                        var index = id.split("_")[1];
+                        var oldVal = $("#idIng" + index).val().split("_")[0];
+                        $("#idIng" + index).val(oldVal + "_" + $(this).val());
+                    });
+                    $('.fa-ban').on('click', function () {
+                        var index = $(this).prev()[0].id.split("_")[1];
+                        var li = $(this).parent().parent();
+                        li.remove();
+                        $("#idIng" + index).remove();
+                        if (numIngredients > 0)
+                            numIngredients--;
+                    });
+                    boundWeightEvent = true;
+
+                    numIngredients++;
                 }
                 $(this).val(ui.item.label);
                 //return false;
@@ -68,7 +116,7 @@ $(function () {
                 event.preventDefault();
                 // or return false;
             }
-        })
+        });
     }
 });
 
@@ -115,6 +163,7 @@ var POST_FITNESSGRAPH_URL = "/Fitness/GetFitnessGraphData/";
 var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/";
 var POST_MEALDETAILS_URL = "/Diet/MealDetails/";
 var GET_ALLINGREDIENTS_URL = "/Diet/GetAllIngredients/";
+var POST_CREATEMEAL_URL = "/Diet/CreateMeal/";
 function MakeDietChart(data) {
     // data will be a list sent from the server
     var ctx = document.getElementById("dietGraph").getContext('2d');

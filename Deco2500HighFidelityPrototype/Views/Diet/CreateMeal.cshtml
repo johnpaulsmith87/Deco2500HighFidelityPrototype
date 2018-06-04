@@ -1,6 +1,6 @@
 ﻿@await Html.PartialAsync("PhoneScreenTop")
 
-<div class="">
+<div class="addMealButtonsContainer">
     <!-- select ingredients -->
     <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -14,6 +14,9 @@
         
     </div>
     <!-- submit button -->
-    <button class="btn btn-outline-secondary bigFont" type="button">Submit</button>
+    <button class="btn btn-outline-secondary bigFont" id="createMealButton" type="button">Create Meal</button>
+    <div class="alert alert-danger bigFont" id="noIngredientSelected" role="alert">
+        Please select at least one ingredient.
+    </div>
 </div>
 @await Html.PartialAsync("PhoneScreenBottomMenu")

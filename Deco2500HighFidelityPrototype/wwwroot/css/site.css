@@ -186,3 +186,18 @@
 .bigFont{
     font-size: 28px;
 }
+.ingItem{
+    display:flex;
+    justify-content:space-between;
+}
+.tomato{
+    color:tomato;
+    margin-left: 3px;
+}
+.ui-menu-item{
+    font-size:24px;
+    font-family: 'Segoe UI';
+}
+#currentIngredientList{
+    width:100%;
+}

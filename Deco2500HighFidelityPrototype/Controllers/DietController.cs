@@ -168,6 +168,17 @@ namespace Deco2500HighFidelityPrototype.Controllers
             return View(vm);
         }
         [HttpPost]
+        public IActionResult CreateMeal(CreateMealReceiver data)
+        {
+            List<(Guid id, decimal weight)> meal = new List<(Guid id, decimal weight)>();
+            foreach(var ingredient in data.ingredients)
+            {
+                var result = ingredient.Split("_");
+                meal.Add((Guid.Parse(result[0]), decimal.Parse(result[1])));
+            }
+            return null;
+        }
+        [HttpPost]
         public IEnumerable<IngredientAutocompleteItem> GetAllIngredients(ChooseMealReceiver data)
         {
             return _appState.AllIngredients
@@ -213,6 +224,10 @@ namespace Deco2500HighFidelityPrototype.Controllers
     public class ChooseMealReceiver
     {
         public string Message { get; set; }
+    }
+    public class CreateMealReceiver
+    {
+        public string[] ingredients { get; set; }
     }
     public class IngredientAutocompleteItem
     {
