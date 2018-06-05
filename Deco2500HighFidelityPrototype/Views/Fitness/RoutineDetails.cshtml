@@ -1,0 +1,38 @@
+﻿@{
+    var vm = Model as FitnessHistoryGraphItem;
+}
+@await Html.PartialAsync("PhoneScreenTop")
+<table class="table detailsTable">
+    <tr><td colspan="2" style="text-align:center;"><span class="alert alert-success"> Routine Saved!</span></td></tr>
+    <tr>
+        <td style="text-align: right;">Name: </td>
+        <td>@vm.Routine.Name</td>
+    </tr>
+    <tr>
+        <td style="text-align: right;">Time Created: </td>
+        <td>@vm.Date</td>
+    </tr>
+    <tr>
+        <td style="text-align: right;">Exercises: </td>
+        <td>
+            @foreach (var i in vm.Exercises)
+            {
+                <span>@i&nbsp;</span>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right;">Calories Burned: </td>
+        <td>
+            @Math.Round(vm.Calories,1)
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right;">Time Taken: </td>
+        <td>
+            @vm.TimeTaken
+        </td>
+    </tr>
+</table>
+
+@await Html.PartialAsync("PhoneScreenBottomMenu")

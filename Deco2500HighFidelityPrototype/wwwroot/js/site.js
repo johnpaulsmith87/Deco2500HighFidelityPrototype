@@ -22,8 +22,10 @@ $(function () {
             SendMealChoice($(this).next().val())
         });
     }
+    $(".backHistory").on("click", () => window.history.back());
     $("#noIngredientSelected").hide();
     $("#noExerciseSelected").hide();
+    $("#noTimeSelected").hide();
     //submit new meal
     $("#createMealButton").on('click', function () {
         if (numIngredients == 0) {
@@ -49,6 +51,51 @@ $(function () {
                 },
                 success: function () {
                     window.location.href = window.location.origin + POST_MEALDETAILS_URL;
+                },
+                error: AlertError
+            })
+        }
+    });
+    $("#createRoutineButton").on('click', function () {
+        //determine if any exercises have 0 time!
+        var hasTime = true;
+        $(".timing").each(function () {
+            if ($(this).val() == "0" || $(this).val() <= 0) {
+                hasTime = false;
+            }
+        })
+        if (numExercises == 0) {
+            $("#noExerciseSelected").show().delay(5000).fadeOut();
+        }
+        else if (!hasTime) {
+            $("#noTimeSelected").show().delay(5000).fadeOut();
+        }
+        else {
+            //gather input
+            var exercises = [];
+            var times = [];
+            var name = "New Routine"
+            if ($("#routineName").val() != "") {
+                name = $("#routineName").val();
+            }
+            $("#hiddenExerciseList").children().each(function (i) {
+                exercises[i] = $(this).val();
+            });
+            var len = $("#hiddenExerciseList").children().length;
+            for (var i = 0; i < len; i++) {
+                times[i] = $("#timing_" + i).val();
+            }
+            $.ajax({
+                type: "POST",
+                url: window.location.origin + POST_CREATEROUTINE_URL,
+                dataType: "json",
+                data: {
+                    times: times,
+                    exercises: exercises,
+                    name: name
+                },
+                success: function (data) {
+                    window.location.href = window.location.origin + POST_ROUTINEDETAILS_URL + "?id="+ data.id;
                 },
                 error: AlertError
             })
@@ -88,7 +135,7 @@ $(function () {
                         + ui.item.label +
                         '</span><span> <span>weight(g):</span> <input type="number" id="ingInputId_'
                         + numIngredients +
-                        '" class="weightAmount" min="1.0" value="1.0" step="0.01" /><i class="fas fa-ban tomato"></i></span></li>');
+                        '" class="weightAmount" min="1.0" value="1.0" step="0.01" /><i class="fas fa-ban tomato hoverClick"></i></span></li>');
                     $("#hiddenIngredientsList")
                         .append('<input type="hidden" id="idIng' + numIngredients + '" value="' + ui.item.value + '_' + '1.0" />');
 
@@ -161,7 +208,7 @@ $(function () {
                         +
                         '<div class="exerciseAmount"><span> amount:</span > <input type="number" id="exInputId_'
                         + numExercises +
-                        '" class="weightAmount" min="1" value="1" step="1" /></div><div class="exerciseCancel"><i class="fas fa-ban fa-3x tomato"></i></div>'
+                        '" class="weightAmount" min="1" value="1" step="1" /></div><div class="exerciseCancel"><i class="fas fa-ban fa-3x tomato hoverClick"></i></div>'
                         + '<div class="exerciseTimeTaken"><span>Time taken: </span><input type="text" id="timing_' + numExercises + '" class="timing">' +
                         '</div></li> ');
                     $("#hiddenExerciseList")
@@ -245,6 +292,7 @@ function SendMealChoice(message) {
         error: AlertError
     });
 }
+//constants
 var POST_DIETGRAPH_URL = "/Diet/GetDietGraphData/";
 var POST_FITNESSGRAPH_URL = "/Fitness/GetFitnessGraphData/";
 var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/";
@@ -252,6 +300,8 @@ var POST_MEALDETAILS_URL = "/Diet/MealDetails/";
 var GET_ALLINGREDIENTS_URL = "/Diet/GetAllIngredients/";
 var POST_CREATEMEAL_URL = "/Diet/CreateMeal/";
 var GET_ALLEXERCISES_URL = "/Fitness/GetAllExercises/";
+var POST_CREATEROUTINE_URL = "/Fitness/CreateRoutine/";
+var POST_ROUTINEDETAILS_URL = "/Fitness/RoutineDetails/"
 function MakeDietChart(data) {
     // data will be a list sent from the server
     var ctx = document.getElementById("dietGraph").getContext('2d');

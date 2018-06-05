@@ -37,7 +37,7 @@
                                         @vm.Today.Exercises[i]
                                     </td>
                                     <td>
-                                        @vm.Today.Routine.Exercises[i].amountTypeDependent
+                                        @Math.Round(vm.Today.Routine.Exercises[i].amountTypeDependent,0)
                                     </td>
                                 </tr>
                             }

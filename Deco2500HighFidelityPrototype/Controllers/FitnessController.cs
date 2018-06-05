@@ -50,10 +50,51 @@ namespace Deco2500HighFidelityPrototype.Controllers
             ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.EditCurrent | ScreenContext.CanGoBack;
             return View();
         }
+        [HttpGet]
         public IActionResult CreateRoutine()
         {
             ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.CreateRoutine | ScreenContext.CanGoBack;
             return View();
+        }
+        [HttpPost]
+        public IActionResult CreateRoutine(CreateRoutineReceiver data)
+        {
+            //
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            List<(Guid exerciseId, decimal amount, TimeSpan ts)> ps = new List<(Guid exerciseId, decimal amount, TimeSpan ts)>();
+            for (int i = 0; i < data.exercises.Length; i++)
+            {
+                var result = data.exercises[i].Split("_");
+                ps.Add((Guid.Parse(result[0]), decimal.Parse(result[1]), TimeSpan.FromSeconds(double.Parse(data.times[i]))));
+            }
+            var user = db.Users[0];
+            var newRoutine = new Routine()
+            {
+                Name = data.name,
+                Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>(ps),
+                RoutineId = Guid.NewGuid()
+            };
+            var newFitH = new FitnessHistory()
+            {
+                EventDateTime = DateTime.Now,
+                RoutinePerformed = newRoutine,
+                UserId = user.Id
+            };
+            db.Users[0].History.Add(newFitH);
+            Database.SaveDatabase(db, _env.ContentRootPath);
+            return Json(new { id = newRoutine.RoutineId });
+        }
+        public IActionResult RoutineDetails(Guid id)
+        {
+            ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.RoutineDetails;
+            //find routine with id!
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var fh = db.Users[0].History
+                .OfType<FitnessHistory>()
+                .SingleOrDefault(h => h.RoutinePerformed.RoutineId == id);
+            //get last 
+            var vm = new FitnessHistoryGraphItem(fh, _appState.AllExercises);
+            return View(vm);
         }
         //Fitness/GetFitnessGraphData/id?
         [HttpPost]
@@ -88,6 +129,12 @@ namespace Deco2500HighFidelityPrototype.Controllers
     public class ChooseExerciseReceiver
     {
         public string Message { get; set; }
+    }
+    public class CreateRoutineReceiver
+    {
+        public string[] times { get; set; }
+        public string name { get; set; }
+        public string[] exercises { get; set; }
     }
     public class ExerciseAutocompleteItem
     {

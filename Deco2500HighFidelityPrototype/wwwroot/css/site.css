@@ -345,3 +345,6 @@
     justify-self:center;
     align-self:center;
 }
+.hoverClick {
+    cursor: pointer;
+}
