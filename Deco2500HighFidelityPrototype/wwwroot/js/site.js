@@ -155,18 +155,20 @@ $(function () {
                 }
                 if (!match) {
                     $("#currentExerciseList")
-                        .append('<li class="list-group-item midFont ingItem"> <span>'
+                        .append('<li class="list-group-item midFont ingItem"> <div class="exerciseListItemGrid"><div class="exerciseLabel"><span>'
                         + ui.item.label +
-                        '</span><span>'
+                        '</span></div>'
                         +
-                        '<span> amount:</span > <input type="number" id="exInputId_'
+                        '<div class="exerciseAmount"><span> amount:</span > <input type="number" id="exInputId_'
                         + numExercises +
-                        '" class="weightAmount" min="1" value="1" step="1" /><i class="fas fa-ban tomato"></i></span>'
-                        + '<input type="text" id="timing_' + numExercises + '" class="timing">' +
-                        '</li > ');
+                        '" class="weightAmount" min="1" value="1" step="1" /></div><div class="exerciseCancel"><i class="fas fa-ban fa-3x tomato"></i></div>'
+                        + '<div class="exerciseTimeTaken"><span>Time taken: </span><input type="text" id="timing_' + numExercises + '" class="timing">' +
+                        '</div></li> ');
                     $("#hiddenExerciseList")
                         .append('<input type="hidden" id="idEx' + numExercises + '" value="' + ui.item.value + '_' + '1.0" />');
-                    $(".timing").timingfield();
+                    $(".timing").timingfield({
+                        width: 300
+                    });
                     $('.weightAmount').on('change', function () {
                         var id = $(this)[0].id;
                         var index = id.split("_")[1];
@@ -174,8 +176,8 @@ $(function () {
                         $("#idEx" + index).val(oldVal + "_" + $(this).val());
                     });
                     $('.fa-ban').on('click', function () {
-                        var index = $(this).prev()[0].id.split("_")[1];
-                        var li = $(this).parent().parent();
+                        var index = $(this).parent().prev().find('input')[0].id.split("_")[1];
+                        var li = $(this).parent().parent().parent();
                         li.remove();
                         $("#idEx" + index).remove();
                         if (numExercises > 0)

@@ -258,6 +258,6 @@
             </span>\
             <button type="button" class="timingfield_prev btn btn-light btn-xs btn-block" tabindex="-1"><i class="fas fa-minus fa-sm"></i></button>\
         </div>\
-    </div>';
+    </div> </div>';
 
 }( jQuery ));

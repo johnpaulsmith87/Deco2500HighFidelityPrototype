@@ -321,17 +321,27 @@
     width: 100%;
 }
 .exerciseListItemGrid{
-
+    display:grid;
+    grid-template-columns: 55% 35% 10%;
+    grid-template-rows: 40% 60%;
+    grid-template-areas:
+        "label amount cancel"
+        "timing timing cancel";
+    width:100%;
 }
 .exerciseLabel{
-
+    grid-area: label;
 }
 .exerciseAmount{
-
+    grid-area: amount;
+    justify-self: left;
+    align-self: center;
 }
 .exerciseTimeTaken{
-
+    grid-area: timing;
 }
 .exerciseCancel{
-
+    grid-area:cancel;
+    justify-self:center;
+    align-self:center;
 }
