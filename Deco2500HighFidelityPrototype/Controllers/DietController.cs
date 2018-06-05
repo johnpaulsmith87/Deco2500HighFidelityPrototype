@@ -212,7 +212,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
                 .OrderByDescending(h => h.EventDateTime)
                 .Select(h => new DietHistoryGraphItem(h, _appState.AllIngredients, h.Meal.Name))
                 .FirstOrDefault();
-            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.MealDetails;
+            ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.MealDetails;
             return View(lastMeal);
         }
         //Diet/GetDietGraphData/id?
