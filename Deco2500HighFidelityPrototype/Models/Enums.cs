@@ -22,7 +22,10 @@ namespace Deco2500HighFidelityPrototype.Models
         ChooseMeal = 1 << 6,
         CreateMeal = 1 << 7,
         MealDetails = 1 << 8,
-        CanGoBack = 1 << 9      // | if you can go back
+        EditCurrent = 1 << 9,
+        CreateRoutine = 1 << 10,
+        RoutineDetails = 1 << 11,
+        CanGoBack = 1 << 12      // | if you can go back
     }
     public enum HistoryType
     {

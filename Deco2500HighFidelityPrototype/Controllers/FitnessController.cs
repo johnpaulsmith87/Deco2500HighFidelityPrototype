@@ -23,9 +23,77 @@ namespace Deco2500HighFidelityPrototype.Controllers
         }
         public IActionResult Index()
         {
-            var user = Database.GetDatabase(_env.ContentRootPath).Users.FirstOrDefault();
-            var vm = new ExerciseIndexViewModel(user);
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var user = db.Users[0];
+            bool hasActiveRoutine = db.Users[0].History
+                .OfType<FitnessHistory>()
+                .Any(f => f.EventDateTime.Date == DateTime.Now.Date);
+            var vm = new ExerciseIndexViewModel()
+            {
+                User = user,
+                ActiveToday = hasActiveRoutine
+            };
+            if (hasActiveRoutine)
+            {
+                var today = db.Users[0].History
+                .OfType<FitnessHistory>()
+                .Where(fh => fh.EventDateTime.Date == DateTime.Now.Date)
+                .OrderByDescending(fh => fh.EventDateTime)
+                .FirstOrDefault();
+                vm.Today = new FitnessHistoryGraphItem(today, _appState.AllExercises);
+            }
             //get user from database
+            return View(vm);
+        }
+        public IActionResult EditCurrentRoutine()
+        {
+            ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.EditCurrent | ScreenContext.CanGoBack;
+            return View();
+        }
+        [HttpGet]
+        public IActionResult CreateRoutine()
+        {
+            ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.CreateRoutine | ScreenContext.CanGoBack;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateRoutine(CreateRoutineReceiver data)
+        {
+            //
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            List<(Guid exerciseId, decimal amount, TimeSpan ts)> ps = new List<(Guid exerciseId, decimal amount, TimeSpan ts)>();
+            for (int i = 0; i < data.exercises.Length; i++)
+            {
+                var result = data.exercises[i].Split("_");
+                ps.Add((Guid.Parse(result[0]), decimal.Parse(result[1]), TimeSpan.FromSeconds(double.Parse(data.times[i]))));
+            }
+            var user = db.Users[0];
+            var newRoutine = new Routine()
+            {
+                Name = data.name,
+                Exercises = new List<(Guid ExerciseId, decimal amountTypeDependent, TimeSpan timeTaken)>(ps),
+                RoutineId = Guid.NewGuid()
+            };
+            var newFitH = new FitnessHistory()
+            {
+                EventDateTime = DateTime.Now,
+                RoutinePerformed = newRoutine,
+                UserId = user.Id
+            };
+            db.Users[0].History.Add(newFitH);
+            Database.SaveDatabase(db, _env.ContentRootPath);
+            return Json(new { id = newRoutine.RoutineId });
+        }
+        public IActionResult RoutineDetails(Guid id)
+        {
+            ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.RoutineDetails;
+            //find routine with id!
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var fh = db.Users[0].History
+                .OfType<FitnessHistory>()
+                .SingleOrDefault(h => h.RoutinePerformed.RoutineId == id);
+            //get last 
+            var vm = new FitnessHistoryGraphItem(fh, _appState.AllExercises);
             return View(vm);
         }
         //Fitness/GetFitnessGraphData/id?
@@ -46,6 +114,32 @@ namespace Deco2500HighFidelityPrototype.Controllers
             ViewData["ScreenContext"] = ScreenContext.Fitness;
             base.OnActionExecuting(context);
         }
+        public IEnumerable<ExerciseAutocompleteItem> GetAllExercises(ChooseExerciseReceiver data)
+        {
+            return _appState.AllExercises
+                .Where(i => i.Name.StartsWith(data.Message, StringComparison.OrdinalIgnoreCase))
+                .Select(i => new ExerciseAutocompleteItem()
+                {
+                    label = i.Name,
+                    value = i.ExerciseId
+                });
+        }
+    }
+    //POCOs FOR AJAX - well some aren't simply POCOs
+    public class ChooseExerciseReceiver
+    {
+        public string Message { get; set; }
+    }
+    public class CreateRoutineReceiver
+    {
+        public string[] times { get; set; }
+        public string name { get; set; }
+        public string[] exercises { get; set; }
+    }
+    public class ExerciseAutocompleteItem
+    {
+        public Guid value { get; set; }
+        public string label { get; set; }
     }
     public class FitnessGraphReceiver
     {
@@ -59,7 +153,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
             Exercises = new List<string>();
             foreach (var (ExerciseId, amountTypeDependent, timeTaken) in fH.RoutinePerformed.Exercises)
             {
-                Exercise e = exercises.Single(ex => ex.ExerciseId == ex.ExerciseId);
+                Exercise e = exercises.Single(ex => ex.ExerciseId == ExerciseId);
                 //get ingredient name
                 Exercises.Add(e.Name);
                 cal += e.CaloriesPerUnit * amountTypeDependent;
@@ -67,10 +161,12 @@ namespace Deco2500HighFidelityPrototype.Controllers
             }
             Calories = cal;
             Date = fH.EventDateTime;
+            Routine = fH.RoutinePerformed;
         }
         public decimal Calories { get; set; }
         public DateTime Date { get; set; }
         public TimeSpan TimeTaken { get; set; }
         public List<string> Exercises { get; set; }
+        public Routine Routine { get; set; }
     }
 }

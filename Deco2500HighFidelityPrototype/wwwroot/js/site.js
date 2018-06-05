@@ -2,8 +2,8 @@
 $(function () {
     var y = $(window).scrollTop();  //your current y position on the page
     $(window).scrollTop(y + 150);
-    var boundWeightEvent = false;
     var numIngredients = 0;
+    var numExercises = 0;
     //first check which page we're on!
     if ($("#dietGraph").length) {
         GetDietGraphData();
@@ -22,8 +22,11 @@ $(function () {
             SendMealChoice($(this).next().val())
         });
     }
+    $(".backHistory").on("click", () => window.history.back());
     $("#noIngredientSelected").hide();
-
+    $("#noExerciseSelected").hide();
+    $("#noTimeSelected").hide();
+    //submit new meal
     $("#createMealButton").on('click', function () {
         if (numIngredients == 0) {
             $("#noIngredientSelected").show().delay(5000).fadeOut();
@@ -53,7 +56,54 @@ $(function () {
             })
         }
     });
+    $("#createRoutineButton").on('click', function () {
+        //determine if any exercises have 0 time!
+        var hasTime = true;
+        $(".timing").each(function () {
+            if ($(this).val() == "0" || $(this).val() <= 0) {
+                hasTime = false;
+            }
+        })
+        if (numExercises == 0) {
+            $("#noExerciseSelected").show().delay(5000).fadeOut();
+        }
+        else if (!hasTime) {
+            $("#noTimeSelected").show().delay(5000).fadeOut();
+        }
+        else {
+            //gather input
+            var exercises = [];
+            var times = [];
+            var name = "New Routine"
+            if ($("#routineName").val() != "") {
+                name = $("#routineName").val();
+            }
+            $("#hiddenExerciseList").children().each(function (i) {
+                exercises[i] = $(this).val();
+            });
+            var len = $("#hiddenExerciseList").children().length;
+            for (var i = 0; i < len; i++) {
+                times[i] = $("#timing_" + i).val();
+            }
+            $.ajax({
+                type: "POST",
+                url: window.location.origin + POST_CREATEROUTINE_URL,
+                dataType: "json",
+                data: {
+                    times: times,
+                    exercises: exercises,
+                    name: name
+                },
+                success: function (data) {
+                    window.location.href = window.location.origin + POST_ROUTINEDETAILS_URL + "?id="+ data.id;
+                },
+                error: AlertError
+            })
+        }
+    });
+    //submit new routine
 
+    //ingredients autocomplete start
     if ($('#ingredientAutocomplete').length) {
         $('#ingredientAutocomplete').autocomplete({
             source: (request, response) => {
@@ -85,7 +135,7 @@ $(function () {
                         + ui.item.label +
                         '</span><span> <span>weight(g):</span> <input type="number" id="ingInputId_'
                         + numIngredients +
-                        '" class="weightAmount" min="1.0" value="1.0" step="0.01" /><i class="fas fa-ban tomato"></i></span></li>');
+                        '" class="weightAmount" min="1.0" value="1.0" step="0.01" /><i class="fas fa-ban tomato hoverClick"></i></span></li>');
                     $("#hiddenIngredientsList")
                         .append('<input type="hidden" id="idIng' + numIngredients + '" value="' + ui.item.value + '_' + '1.0" />');
 
@@ -103,7 +153,6 @@ $(function () {
                         if (numIngredients > 0)
                             numIngredients--;
                     });
-                    boundWeightEvent = true;
 
                     numIngredients++;
                 }
@@ -125,6 +174,84 @@ $(function () {
             }
         });
     }
+    //exercise autocomplete
+    if ($('#exerciseAutocomplete').length) {
+        $('#exerciseAutocomplete').autocomplete({
+            source: (request, response) => {
+                $.ajax({
+                    type: "POST",
+                    url: window.location.origin + GET_ALLEXERCISES_URL,
+                    data: { Message: request.term },
+                    dataType: "json",
+                    success: (data) => {
+                        response(data);
+                    },
+                    error: AlertError
+                });
+
+            },
+            minLength: 2,
+            delay: 100,
+            select: (event, ui) => {
+                event.preventDefault();
+                var match = false;
+                var currentChildren = $("#hiddenExerciseList").children();
+                for (var i = 0; i < $(currentChildren).length; i++) {
+                    if ($(currentChildren[i]).val().includes(ui.item.value))
+                        match = true;
+                }
+                if (!match) {
+                    $("#currentExerciseList")
+                        .append('<li class="list-group-item midFont ingItem"> <div class="exerciseListItemGrid"><div class="exerciseLabel"><span>'
+                        + ui.item.label +
+                        '</span></div>'
+                        +
+                        '<div class="exerciseAmount"><span> amount:</span > <input type="number" id="exInputId_'
+                        + numExercises +
+                        '" class="weightAmount" min="1" value="1" step="1" /></div><div class="exerciseCancel"><i class="fas fa-ban fa-3x tomato hoverClick"></i></div>'
+                        + '<div class="exerciseTimeTaken"><span>Time taken: </span><input type="text" id="timing_' + numExercises + '" class="timing">' +
+                        '</div></li> ');
+                    $("#hiddenExerciseList")
+                        .append('<input type="hidden" id="idEx' + numExercises + '" value="' + ui.item.value + '_' + '1.0" />');
+                    $(".timing").timingfield({
+                        width: 300
+                    });
+                    $('.weightAmount').on('change', function () {
+                        var id = $(this)[0].id;
+                        var index = id.split("_")[1];
+                        var oldVal = $("#idEx" + index).val().split("_")[0];
+                        $("#idEx" + index).val(oldVal + "_" + $(this).val());
+                    });
+                    $('.fa-ban').on('click', function () {
+                        var index = $(this).parent().prev().find('input')[0].id.split("_")[1];
+                        var li = $(this).parent().parent().parent();
+                        li.remove();
+                        $("#idEx" + index).remove();
+                        if (numExercises > 0)
+                            numExercises--;
+                    });
+
+                    numExercises++;
+                }
+                $(this).val(ui.item.label);
+                //return false;
+            },
+            change: function (ev, ui) {
+                if (ui.item) {
+                    $(this).val('');
+                }
+            },
+            focus: function (event, ui) {
+                $(this).val() = ui.item.label;
+                // or $('#autocomplete-input').val(ui.item.label);
+
+                // Prevent the default focus behavior.
+                event.preventDefault();
+                // or return false;
+            }
+        });
+    }
+    //ingredient autocomplete end
 });
 
 function GetDietGraphData() {
@@ -165,12 +292,16 @@ function SendMealChoice(message) {
         error: AlertError
     });
 }
+//constants
 var POST_DIETGRAPH_URL = "/Diet/GetDietGraphData/";
 var POST_FITNESSGRAPH_URL = "/Fitness/GetFitnessGraphData/";
 var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/";
 var POST_MEALDETAILS_URL = "/Diet/MealDetails/";
 var GET_ALLINGREDIENTS_URL = "/Diet/GetAllIngredients/";
 var POST_CREATEMEAL_URL = "/Diet/CreateMeal/";
+var GET_ALLEXERCISES_URL = "/Fitness/GetAllExercises/";
+var POST_CREATEROUTINE_URL = "/Fitness/CreateRoutine/";
+var POST_ROUTINEDETAILS_URL = "/Fitness/RoutineDetails/"
 function MakeDietChart(data) {
     // data will be a list sent from the server
     var ctx = document.getElementById("dietGraph").getContext('2d');
@@ -256,29 +387,33 @@ function MakeFitnessChart(data) {
     var ctx = document.getElementById("fitnessGraph").getContext('2d');
     // do chart stuff - this is example code from chart.js docs
     // modify for our chart
-    var lemmeSee = data;
+    var dates = [];
+    var calories = [];
+    for (var i = 0; i < data.length; i++) {
+        calories[i] = data[i].calories;
+        dates[i] = moment(data[i].date);
+    }
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: dates,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: 'Energy expended during workout',
+                data: calories,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+
                 ],
                 borderColor: [
-                    'rgba(255,99,132,1)',
                     'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)'
                 ],
                 borderWidth: 1
             }]
@@ -289,7 +424,22 @@ function MakeFitnessChart(data) {
                     ticks: {
                         beginAtZero: true
                     }
+                }],
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        format: 'MMM D',
+                        unit: 'day',
+                        displayFormats: { day: 'MMM D' }
+                    },
+                    barThickness: 75
                 }]
+            },
+            legend: {
+                labels: {
+                    fontSize: 16,
+                    fontFamily: "Segoe UI"
+                }
             }
         }
     });
