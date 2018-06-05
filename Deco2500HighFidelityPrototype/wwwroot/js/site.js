@@ -2,8 +2,8 @@
 $(function () {
     var y = $(window).scrollTop();  //your current y position on the page
     $(window).scrollTop(y + 150);
-    var boundWeightEvent = false;
     var numIngredients = 0;
+    var numExercises = 0;
     //first check which page we're on!
     if ($("#dietGraph").length) {
         GetDietGraphData();
@@ -23,7 +23,8 @@ $(function () {
         });
     }
     $("#noIngredientSelected").hide();
-
+    $("#noExerciseSelected").hide();
+    //submit new meal
     $("#createMealButton").on('click', function () {
         if (numIngredients == 0) {
             $("#noIngredientSelected").show().delay(5000).fadeOut();
@@ -53,7 +54,9 @@ $(function () {
             })
         }
     });
+    //submit new routine
 
+    //ingredients autocomplete start
     if ($('#ingredientAutocomplete').length) {
         $('#ingredientAutocomplete').autocomplete({
             source: (request, response) => {
@@ -103,7 +106,6 @@ $(function () {
                         if (numIngredients > 0)
                             numIngredients--;
                     });
-                    boundWeightEvent = true;
 
                     numIngredients++;
                 }
@@ -125,6 +127,77 @@ $(function () {
             }
         });
     }
+    if ($('#exerciseAutocomplete').length) {
+        $('#exerciseAutocomplete').autocomplete({
+            source: (request, response) => {
+                $.ajax({
+                    type: "POST",
+                    url: window.location.origin + GET_ALLEXERCISES_URL,
+                    data: { Message: request.term },
+                    dataType: "json",
+                    success: (data) => {
+                        response(data);
+                    },
+                    error: AlertError
+                });
+
+            },
+            minLength: 2,
+            delay: 100,
+            select: (event, ui) => {
+                event.preventDefault();
+                var match = false;
+                var currentChildren = $("#hiddenExerciseList").children();
+                for (var i = 0; i < $(currentChildren).length; i++) {
+                    if ($(currentChildren[i]).val().includes(ui.item.value))
+                        match = true;
+                }
+                if (!match) {
+                    $("#currentExerciseList")
+                        .append('<li class="list-group-item bigFont ingItem"> <span>'
+                        + ui.item.label +
+                        '</span><span> <span>weight(g):</span> <input type="number" id="exInputId_'
+                        + numExercises +
+                        '" class="weightAmount" min="1.0" value="1.0" step="0.01" /><i class="fas fa-ban tomato"></i></span></li>');
+                    $("#hiddenExerciseList")
+                        .append('<input type="hidden" id="idEx' + numExercises + '" value="' + ui.item.value + '_' + '1.0" />');
+
+                    $('.weightAmount').on('change', function () {
+                        var id = $(this)[0].id;
+                        var index = id.split("_")[1];
+                        var oldVal = $("#idEx" + index).val().split("_")[0];
+                        $("#idEx" + index).val(oldVal + "_" + $(this).val());
+                    });
+                    $('.fa-ban').on('click', function () {
+                        var index = $(this).prev()[0].id.split("_")[1];
+                        var li = $(this).parent().parent();
+                        li.remove();
+                        $("#idEx" + index).remove();
+                        if (numExercises > 0)
+                            numExercises--;
+                    });
+
+                    numExercises++;
+                }
+                $(this).val(ui.item.label);
+                //return false;
+            },
+            change: function (ev, ui) {
+                if (ui.item) {
+                    $(this).val('');
+                }
+            },
+            focus: function (event, ui) {
+                $(this).val() = ui.item.label;
+                // or $('#autocomplete-input').val(ui.item.label);
+
+                // Prevent the default focus behavior.
+                event.preventDefault();
+                // or return false;
+            }
+        });
+    }
+    //ingredient autocomplete end
 });
 
 function GetDietGraphData() {
@@ -171,6 +244,7 @@ var POST_CHOOSEMEAL_URL = "/Diet/ChooseMeal/";
 var POST_MEALDETAILS_URL = "/Diet/MealDetails/";
 var GET_ALLINGREDIENTS_URL = "/Diet/GetAllIngredients/";
 var POST_CREATEMEAL_URL = "/Diet/CreateMeal/";
+var GET_ALLEXERCISES_URL = "/Fitness/GetAllExercises/";
 function MakeDietChart(data) {
     // data will be a list sent from the server
     var ctx = document.getElementById("dietGraph").getContext('2d');

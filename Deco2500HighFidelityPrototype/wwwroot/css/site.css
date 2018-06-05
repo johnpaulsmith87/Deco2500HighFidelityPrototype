@@ -293,11 +293,27 @@
 .fitnessMainAdd {
     grid-area: add;
     width: 50%;
+    align-self: end;
+    justify-self: left;
 }
 .fitnessMainNew {
     grid-area: new;
+    align-self: center;
+    justify-self: left;
 }
 .fitnessMainDelete {
     grid-area: delete;
     width: 50%;
+    align-self: initial;
+    justify-self:left;
+}
+.fitnessMainButtons {
+    font-size: 20px;
+    padding-right: 25px;
+}
+.margin-sm{
+    margin-left: 15px;
+}
+#currentExerciseList {
+    width: 100%;
 }

@@ -1,0 +1,30 @@
+﻿@await Html.PartialAsync("PhoneScreenTop")
+
+<div class="addMealButtonsContainer">
+    <!-- select ingredients -->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text bigFont" id="basic-addon1">Exercise</span>
+        </div>
+        <input type="text" id="exerciseAutocomplete" class="form-control bigFont" placeholder="Pick an exercise..." aria-label="Pick an exercise..." aria-describedby="basic-addon1">
+    </div>
+    <!-- displaying current ingredients input box for amount -->
+    <ul class="list-group" id="currentExerciseList"></ul>
+    <div id="hiddenExerciseList">
+
+    </div>
+    <!-- meal name -->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text bigFont" id="inputGroup-sizing-default">Routine Name</span>
+        </div>
+        <input type="text" class="form-control bigFont" id="routineName" aria-label="Routine Name" aria-describedby="inputGroup-sizing-default">
+    </div>
+    <!-- submit button -->
+    <button class="btn btn-outline-secondary bigFont" id="createRoutineButton" type="button">Create Routine</button>
+    <div class="alert alert-danger bigFont" id="noExerciseSelected" role="alert">
+        Please select at least one exercise.
+    </div>
+</div>
+
+@await Html.PartialAsync("PhoneScreenBottomMenu")

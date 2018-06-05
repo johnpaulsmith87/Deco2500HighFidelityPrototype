@@ -33,6 +33,14 @@
     {
         <span class="ScreenTitle">Meal Details</span>
     }
+    else if (ctx.HasFlag(ScreenContext.EditCurrent))
+    {
+        <span class="ScreenTitle">Add To Routine</span>
+    }
+    else if (ctx.HasFlag(ScreenContext.CreateRoutine))
+    {
+        <span class="ScreenTitle">Create Routine</span>
+    }
     else if (ctx.HasFlag(ScreenContext.Settings))
     {
         <span class="ScreenTitle">Settings</span>

@@ -23,10 +23,37 @@ namespace Deco2500HighFidelityPrototype.Controllers
         }
         public IActionResult Index()
         {
-            var user = Database.GetDatabase(_env.ContentRootPath).Users.FirstOrDefault();
-            var vm = new ExerciseIndexViewModel(user);
+            var db = Database.GetDatabase(_env.ContentRootPath);
+            var user = db.Users[0];
+            bool hasActiveRoutine = db.Users[0].History
+                .OfType<FitnessHistory>()
+                .Any(f => f.EventDateTime.Date == DateTime.Now.Date);
+            var vm = new ExerciseIndexViewModel()
+            {
+                User = user,
+                ActiveToday = hasActiveRoutine
+            };
+            if (hasActiveRoutine)
+            {
+                var today = db.Users[0].History
+                .OfType<FitnessHistory>()
+                .Where(fh => fh.EventDateTime.Date == DateTime.Now.Date)
+                .OrderByDescending(fh => fh.EventDateTime)
+                .FirstOrDefault();
+                vm.Today = new FitnessHistoryGraphItem(today, _appState.AllExercises);
+            }
             //get user from database
             return View(vm);
+        }
+        public IActionResult EditCurrentRoutine()
+        {
+            ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.EditCurrent | ScreenContext.CanGoBack;
+            return View();
+        }
+        public IActionResult CreateRoutine()
+        {
+            ViewData["ScreenContext"] = ScreenContext.Fitness | ScreenContext.CreateRoutine | ScreenContext.CanGoBack;
+            return View();
         }
         //Fitness/GetFitnessGraphData/id?
         [HttpPost]
@@ -46,6 +73,26 @@ namespace Deco2500HighFidelityPrototype.Controllers
             ViewData["ScreenContext"] = ScreenContext.Fitness;
             base.OnActionExecuting(context);
         }
+        public IEnumerable<ExerciseAutocompleteItem> GetAllExercises(ChooseExerciseReceiver data)
+        {
+            return _appState.AllExercises
+                .Where(i => i.Name.StartsWith(data.Message, StringComparison.OrdinalIgnoreCase))
+                .Select(i => new ExerciseAutocompleteItem()
+                {
+                    label = i.Name,
+                    value = i.ExerciseId
+                });
+        }
+    }
+    //POCOs FOR AJAX - well some aren't simply POCOs
+    public class ChooseExerciseReceiver
+    {
+        public string Message { get; set; }
+    }
+    public class ExerciseAutocompleteItem
+    {
+        public Guid value { get; set; }
+        public string label { get; set; }
     }
     public class FitnessGraphReceiver
     {

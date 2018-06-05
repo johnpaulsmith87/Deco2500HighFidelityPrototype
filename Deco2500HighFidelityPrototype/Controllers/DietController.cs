@@ -161,11 +161,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
         public IActionResult CreateMeal()
         {
             ViewData["ScreenContext"] = ScreenContext.Diet | ScreenContext.CanGoBack | ScreenContext.CreateMeal;
-            var vm = new CreateMealViewModel()
-            {
-                Ingredients = new List<Ingredient>(_appState.AllIngredients)
-            };
-            return View(vm);
+            return View();
         }
         [HttpPost]
         public IActionResult CreateMeal(CreateMealReceiver data)

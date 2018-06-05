@@ -1,27 +1,80 @@
 ﻿@{
     ViewData["Title"] = "Index";
-    User user = Model.User as User;
+    var vm = Model as ExerciseIndexViewModel;
 }
 @await Html.PartialAsync("PhoneScreenTop")
 
 @*
     Put View specific code here!
 *@
-<input type="hidden" id="userId" value="@user.Id" />
+<input type="hidden" id="userId" value="@vm.User.Id" />
 <canvas id="fitnessGraph"></canvas>
 <div class="fitnessMainGrid">
     <div class="fitnessMainToday">
         <div class="card" style="height: 90%">
             <h5 class="card-header">Today's Results</h5>
             <div class="card-body">
-                <h5 class="card-title">DATE GO HERE</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <h5 class="card-title">@DateTime.Now.ToString("dd-MM-yyyy")</h5>
+                <p class="card-text">
+                    @if (vm.ActiveToday)
+                    {
+                        <div>Workout name: @vm.Today.Routine.Name</div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Exercise
+                                    </th>
+                                    <th>
+                                        Amount
+                                    </th>
+                                </tr>
+                            </thead>
+                            @for(int i = 0; i < vm.Today.Exercises.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @vm.Today.Exercises[i]
+                                    </td>
+                                    <td>
+                                        @vm.Today.Routine.Exercises[i].amountTypeDependent
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <span>No active routine</span>
+                    }
+                </p>
             </div>
         </div>
     </div>
-    <div class="fitnessMainAdd"></div>
-    <div class="fitnessMainNew"></div>
-    <div class="fitnessMainDelete"></div>
+    <div class="fitnessMainAdd">
+        <a href="@Url.Action("EditCurrentRoutine","Fitness")" class="btn btn-outline-dark btn-lg margin-sm">
+            <div class="buttonInline">
+                <span class="fitnessMainButtons">Add To Current Routine</span>
+                <i class="far fa-edit fa-3x"></i>
+            </div>
+        </a>
+    </div>
+    <div class="fitnessMainNew">
+        <a href="@Url.Action("CreateRoutine","Fitness")" class="btn btn-outline-dark btn-lg margin-sm">
+            <div class="buttonInline">
+                <span class="fitnessMainButtons">Create New Routine</span>
+                <i class="fas fa-plus-square fa-3x"></i>
+            </div>
+        </a>
+    </div>
+    <div class="fitnessMainDelete">
+        <a href="" class="btn btn-outline-dark btn-lg margin-sm">
+            <div class="buttonInline">
+                <span class="fitnessMainButtons">Delete Current Routine</span>
+                <i class="far fa-trash-alt fa-3x"></i>
+            </div>
+        </a>
+    </div>
 </div>
 
 
