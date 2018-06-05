@@ -235,28 +235,28 @@
 
     $.fn.timingfield.template = '<div class="timingfield">\
         <div class="timingfield_hours">\
-            <button type="button" class="timingfield_next btn btn-default btn-xs btn-block" tabindex="-1"><span class="glyphicon glyphicon-plus"></span></button>\
+            <button type="button" class="timingfield_next btn btn-light btn-xs btn-block" tabindex="-1"><i class="fas fa-plus fa-sm"></i></button>\
             <div class="input-group">\
                 <input type="text" class="form-control">\
                 <span class="input-group-addon"></span>\
             </div>\
-            <button type="button" class="timingfield_prev btn btn-default btn-xs btn-block" tabindex="-1"><span class="glyphicon glyphicon-minus"></span></button>\
+            <button type="button" class="timingfield_prev btn btn-light btn-xs btn-block" tabindex="-1"><i class="fas fa-minus fa-sm"></i></button>\
         </div>\
         <div class="timingfield_minutes">\
-            <button type="button" class="timingfield_next btn btn-default btn-xs btn-block" tabindex="-1"><span class="glyphicon glyphicon-plus"></span></button>\
+            <button type="button" class="timingfield_next btn btn-light btn-xs btn-block" tabindex="-1"><i class="fas fa-plus fa-sm"></i></button>\
             <span class="input-group">\
                 <input type="text" class="form-control">\
                 <span class="input-group-addon"></span>\
             </span>\
-            <button type="button" class="timingfield_prev btn btn-default btn-xs btn-block" tabindex="-1"><span class="glyphicon glyphicon-minus"></span></button>\
+            <button type="button" class="timingfield_prev btn btn-light btn-xs btn-block" tabindex="-1"><i class="fas fa-minus fa-sm"></i></button>\
         </div>\
         <div class="timingfield_seconds">\
-            <button type="button" class="timingfield_next btn btn-default btn-xs btn-block" tabindex="-1"><span class="glyphicon glyphicon-plus"></span></button>\
+            <button type="button" class="timingfield_next btn btn-light btn-xs btn-block" tabindex="-1"><i class="fas fa-plus fa-sm"></i></button>\
             <span class="input-group">\
                 <input type="text" class="form-control">\
                 <span class="input-group-addon"></span>\
             </span>\
-            <button type="button" class="timingfield_prev btn btn-default btn-xs btn-block" tabindex="-1"><span class="glyphicon glyphicon-minus"></span></button>\
+            <button type="button" class="timingfield_prev btn btn-light btn-xs btn-block" tabindex="-1"><i class="fas fa-minus fa-sm"></i></button>\
         </div>\
     </div>';
 

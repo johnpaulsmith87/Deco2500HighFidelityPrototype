@@ -127,6 +127,7 @@ $(function () {
             }
         });
     }
+    //exercise autocomplete
     if ($('#exerciseAutocomplete').length) {
         $('#exerciseAutocomplete').autocomplete({
             source: (request, response) => {
@@ -154,14 +155,18 @@ $(function () {
                 }
                 if (!match) {
                     $("#currentExerciseList")
-                        .append('<li class="list-group-item bigFont ingItem"> <span>'
+                        .append('<li class="list-group-item midFont ingItem"> <span>'
                         + ui.item.label +
-                        '</span><span> <span>weight(g):</span> <input type="number" id="exInputId_'
+                        '</span><span>'
+                        +
+                        '<span> amount:</span > <input type="number" id="exInputId_'
                         + numExercises +
-                        '" class="weightAmount" min="1.0" value="1.0" step="0.01" /><i class="fas fa-ban tomato"></i></span></li>');
+                        '" class="weightAmount" min="1" value="1" step="1" /><i class="fas fa-ban tomato"></i></span>'
+                        + '<input type="text" id="timing_' + numExercises + '" class="timing">' +
+                        '</li > ');
                     $("#hiddenExerciseList")
                         .append('<input type="hidden" id="idEx' + numExercises + '" value="' + ui.item.value + '_' + '1.0" />');
-
+                    $(".timing").timingfield();
                     $('.weightAmount').on('change', function () {
                         var id = $(this)[0].id;
                         var index = id.split("_")[1];

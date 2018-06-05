@@ -212,6 +212,9 @@
 .bigFont {
     font-size: 28px;
 }
+.midFont{
+    font-size: 20px;
+}
 
 .ingItem {
     display: flex;
@@ -316,4 +319,19 @@
 }
 #currentExerciseList {
     width: 100%;
+}
+.exerciseListItemGrid{
+
+}
+.exerciseLabel{
+
+}
+.exerciseAmount{
+
+}
+.exerciseTimeTaken{
+
+}
+.exerciseCancel{
+
 }
