@@ -256,29 +256,33 @@ function MakeFitnessChart(data) {
     var ctx = document.getElementById("fitnessGraph").getContext('2d');
     // do chart stuff - this is example code from chart.js docs
     // modify for our chart
-    var lemmeSee = data;
+    var dates = [];
+    var calories = [];
+    for (var i = 0; i < data.length; i++) {
+        calories[i] = data[i].calories;
+        dates[i] = moment(data[i].date);
+    }
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: dates,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: 'Energy expended during workout',
+                data: calories,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+
                 ],
                 borderColor: [
-                    'rgba(255,99,132,1)',
                     'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)'
                 ],
                 borderWidth: 1
             }]
@@ -289,7 +293,22 @@ function MakeFitnessChart(data) {
                     ticks: {
                         beginAtZero: true
                     }
+                }],
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        format: 'MMM D',
+                        unit: 'day',
+                        displayFormats: { day: 'MMM D' }
+                    },
+                    barThickness: 75
                 }]
+            },
+            legend: {
+                labels: {
+                    fontSize: 16,
+                    fontFamily: "Segoe UI"
+                }
             }
         }
     });

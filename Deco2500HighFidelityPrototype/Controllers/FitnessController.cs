@@ -59,7 +59,7 @@ namespace Deco2500HighFidelityPrototype.Controllers
             Exercises = new List<string>();
             foreach (var (ExerciseId, amountTypeDependent, timeTaken) in fH.RoutinePerformed.Exercises)
             {
-                Exercise e = exercises.Single(ex => ex.ExerciseId == ex.ExerciseId);
+                Exercise e = exercises.Single(ex => ex.ExerciseId == ExerciseId);
                 //get ingredient name
                 Exercises.Add(e.Name);
                 cal += e.CaloriesPerUnit * amountTypeDependent;
@@ -67,10 +67,12 @@ namespace Deco2500HighFidelityPrototype.Controllers
             }
             Calories = cal;
             Date = fH.EventDateTime;
+            Routine = fH.RoutinePerformed;
         }
         public decimal Calories { get; set; }
         public DateTime Date { get; set; }
         public TimeSpan TimeTaken { get; set; }
         public List<string> Exercises { get; set; }
+        public Routine Routine { get; set; }
     }
 }

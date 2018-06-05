@@ -9,5 +9,21 @@
 *@
 <input type="hidden" id="userId" value="@user.Id" />
 <canvas id="fitnessGraph"></canvas>
+<div class="fitnessMainGrid">
+    <div class="fitnessMainToday">
+        <div class="card" style="height: 90%">
+            <h5 class="card-header">Today's Results</h5>
+            <div class="card-body">
+                <h5 class="card-title">DATE GO HERE</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            </div>
+        </div>
+    </div>
+    <div class="fitnessMainAdd"></div>
+    <div class="fitnessMainNew"></div>
+    <div class="fitnessMainDelete"></div>
+</div>
+
+
 @await Html.PartialAsync("PhoneScreenBottomMenu")
 
